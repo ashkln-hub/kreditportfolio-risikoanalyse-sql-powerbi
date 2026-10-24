@@ -10,3 +10,6 @@ __pycache__/
 # Power BI: lokale Einstellungen und Datencache des Projekts
 **/.pbi/localSettings.json
 **/.pbi/cache.abf
+
+# Virtuelle Python-Umgebung
+.venv/

@@ -3,12 +3,18 @@ Schritt 3 – Grafiken für das README aus den SQL-Ergebnissen erzeugen.
 Ausgabe: ergebnisse/grafiken/*.png
 """
 
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
 import pandas as pd
+
+
+# Konsolenausgabe in UTF-8 (verhindert UnicodeEncodeError in der Windows-Konsole)
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[1]
 ERG = ROOT / "ergebnisse"

@@ -13,6 +13,7 @@ Alle Annahmen stehen in der Konfiguration unten und im README.
 Der Zufallsgenerator hat einen festen Seed → die Daten sind reproduzierbar.
 """
 
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -26,6 +27,11 @@ ANZAHL_KREDITE = 20_000
 ERSTE_AUSZAHLUNG = "2021-01-01"
 LETZTE_AUSZAHLUNG = "2026-08-01"
 BEOBACHTUNGSENDE = "2026-09-30"  # letzter Monatsultimo der Historie
+
+
+# Konsolenausgabe in UTF-8 (verhindert UnicodeEncodeError in der Windows-Konsole)
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "raw"
@@ -265,11 +271,11 @@ def main() -> None:
                 break
             perf.append((kredit_id, stichtag.date().isoformat(), mob, round(restschuld, 2), 0, "Laufend"))
 
-    pd.DataFrame(kunden).to_csv(OUT / "kunden.csv", index=False)
-    pd.DataFrame(kredite).to_csv(OUT / "kredite.csv", index=False)
+    pd.DataFrame(kunden).to_csv(OUT / "kunden.csv", index=False, lineterminator="\n")
+    pd.DataFrame(kredite).to_csv(OUT / "kredite.csv", index=False, lineterminator="\n")
     pd.DataFrame(perf, columns=["kredit_id", "stichtag", "monate_seit_auszahlung", "restschuld",
-                                "tage_ueberfaellig", "status"]).to_csv(OUT / "performance_monat.csv", index=False)
-    pd.DataFrame(verwertung).to_csv(OUT / "verwertung.csv", index=False)
+                                "tage_ueberfaellig", "status"]).to_csv(OUT / "performance_monat.csv", index=False, lineterminator="\n")
+    pd.DataFrame(verwertung).to_csv(OUT / "verwertung.csv", index=False, lineterminator="\n")
 
     print(f"Kunden: {len(kunden):,} | Kredite: {len(kredite):,} | "
           f"Monatssätze: {len(perf):,} | Ausfälle: {len(verwertung):,}")

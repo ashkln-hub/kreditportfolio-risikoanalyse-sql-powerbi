@@ -10,9 +10,15 @@ Schritt 2 – SQL-Pipeline
 
 import re
 import sqlite3
+import sys
 from pathlib import Path
 
 import pandas as pd
+
+
+# Konsolenausgabe in UTF-8 (verhindert UnicodeEncodeError in der Windows-Konsole)
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[1]
 SQL = ROOT / "sql"
@@ -45,7 +51,7 @@ def fuehre_analysen_aus(con: sqlite3.Connection) -> list[tuple[str, str, pd.Data
         for name, abfrage in zip(teile[1::2], teile[2::2]):
             df = pd.read_sql_query(abfrage.strip().rstrip(";"), con)
             ziel = ERG / f"{datei.stem}__{name}.csv"
-            df.to_csv(ziel, index=False, encoding="utf-8-sig", sep=";", decimal=",")
+            df.to_csv(ziel, index=False, encoding="utf-8-sig", sep=";", decimal=",", lineterminator="\n")
             ergebnisse.append((datei.stem, name, df))
             print(f"  {datei.stem} → {name}: {len(df)} Zeilen")
     return ergebnisse
@@ -62,7 +68,7 @@ def schreibe_uebersicht(ergebnisse) -> None:
         if len(df) > 25:
             zeilen.append(f"\n*… {len(df) - 25} weitere Zeilen in `{datei}__{name}.csv`*")
         zeilen.append("")
-    (ERG / "ERGEBNISSE.md").write_text("\n".join(zeilen), encoding="utf-8")
+    (ERG / "ERGEBNISSE.md").write_text("\n".join(zeilen), encoding="utf-8", newline="\n")
 
 
 def exportiere_powerbi(con: sqlite3.Connection) -> None:
@@ -71,7 +77,7 @@ def exportiere_powerbi(con: sqlite3.Connection) -> None:
         "SELECT name FROM sqlite_master WHERE type = 'table' AND (name LIKE 'dim_%' OR name LIKE 'fact_%')")]
     for name in sorted(namen):
         df = pd.read_sql_query(f"SELECT * FROM {name}", con)
-        df.to_csv(PBI / f"{name}.csv", index=False, encoding="utf-8")
+        df.to_csv(PBI / f"{name}.csv", index=False, encoding="utf-8", lineterminator="\n")
         print(f"  exportiert: {name:<22} {len(df):>7,} Zeilen")
 
 
