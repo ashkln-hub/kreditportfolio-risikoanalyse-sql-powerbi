@@ -1,7 +1,10 @@
 # Anleitung: Power-BI-Dashboard aufbauen
 
-Zeitaufwand: ca. 2–3 Stunden. Ergebnis: ein Bericht mit vier Seiten, gespeichert als
-`powerbi/Kreditportfolio_Dashboard.pbix`, plus Screenshots für das README.
+Der fertige Bericht liegt als `powerbi/Kreditportfolio_Dashboard.pbix` bei. Diese Anleitung beschreibt,
+wie er aufgebaut ist – zum Nachvollziehen oder zum Nachbauen von Grund auf (ca. 2–3 Stunden).
+
+> Die aktuelle Fassung aller Measures steht in `powerbi/measures.dax` (25 Measures, u. a. zusätzlich
+> *NPL Volumen Stichtag*, *Anteil am Bestand*, *Risikokosten* und *Risikoadjustierte Marge*).
 
 Alle Daten liegen fertig in `powerbi/daten/` (erzeugt von `src/02_sql_pipeline.py`).
 

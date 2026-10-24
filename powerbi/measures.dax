@@ -1,120 +1,143 @@
 // =====================================================================
-// DAX-Measures für das Power-BI-Dashboard "Kreditportfolio-Risikoanalyse"
-// Anlegen in einer eigenen Tabelle "_Measures" (Start → Daten eingeben → leere Tabelle).
-// Format in Klammern = in Power BI unter "Measuretools → Format" einstellen.
+// DAX-Measures des Power-BI-Dashboards "Kreditportfolio-Risikoanalyse"
+// Identisch mit der Tabelle _Measures im Modell (powerbi/Kreditportfolio_Dashboard.SemanticModel).
+// Hinweis: Dezimalzahlen als Bruch schreiben (z. B. 3 / 100), da das Modell die Kultur de-DE nutzt.
 // =====================================================================
 
 
-// ---------- Stichtag -------------------------------------------------
+// ---------- Basis -------------------------------------------------------
 
 Letzter Stichtag =
     CALCULATE ( MAX ( fact_bestand_monat[datum] ) )
-// Format: Datum
+// Format: dd.MM.yyyy
 
 
-// ---------- Bestand --------------------------------------------------
+// ---------- Bestand -----------------------------------------------------
 
 Bestand =
     SUM ( fact_bestand_monat[restschuld] )
-// Format: Währung €, 0 Dezimalstellen
+// Format: #,0 €
 
 Bestand Stichtag =
     VAR _stichtag = [Letzter Stichtag]
     RETURN
         CALCULATE ( [Bestand], dim_datum[datum] = _stichtag )
-// Bestand zum letzten Monat des gewählten Zeitraums (für Karten)
+// Format: #,0 €
 
 Anzahl Kredite Stichtag =
     VAR _stichtag = [Letzter Stichtag]
     RETURN
         CALCULATE ( SUM ( fact_bestand_monat[anzahl_kredite] ), dim_datum[datum] = _stichtag )
-// Format: Ganze Zahl
+// Format: #,0
 
 Zins volumengewichtet =
-    DIVIDE (
-        SUM ( fact_bestand_monat[restschuld_x_zins] ),
-        SUM ( fact_bestand_monat[restschuld] )
-    ) / 100
-// Format: Prozent, 2 Dezimalstellen
+    DIVIDE ( SUM ( fact_bestand_monat[restschuld_x_zins] ), SUM ( fact_bestand_monat[restschuld] ) ) / 100
+// Format: 0.00%
+
+Zins volumengewichtet Stichtag =
+    VAR _stichtag = [Letzter Stichtag]
+    RETURN
+        CALCULATE ( [Zins volumengewichtet], dim_datum[datum] = _stichtag )
+// Format: 0.00%
+
+Anteil am Bestand =
+    DIVIDE ( [Bestand Stichtag], CALCULATE ( [Bestand Stichtag], ALL ( fact_bestand_monat[verzugsstatus], fact_bestand_monat[verzugsstatus_sortierung] ) ) )
+// Format: 0.00%
 
 
-// ---------- Verzug und NPL -------------------------------------------
+// ---------- Risiko ------------------------------------------------------
 
 NPL Volumen =
-    CALCULATE ( [Bestand], fact_bestand_monat[verzugsstatus] = "4 Ausfall 90+ Tage" )
+    CALCULATE ( [Bestand], fact_bestand_monat[verzugsstatus_sortierung] = 4 )
+// Format: #,0 €
 
 NPL-Quote =
     DIVIDE ( [NPL Volumen], [Bestand] )
-// Format: Prozent, 2 Dezimalstellen
+// Format: 0.00%
 
 Verzugsquote 30+ =
-    DIVIDE (
-        CALCULATE ( [Bestand], fact_bestand_monat[verzugsstatus] <> "1 vertragsgemäß" ),
-        [Bestand]
-    )
-// Format: Prozent, 2 Dezimalstellen
+    DIVIDE ( CALCULATE ( [Bestand], fact_bestand_monat[verzugsstatus_sortierung] > 1 ), [Bestand] )
+// Format: 0.00%
 
 NPL-Quote Stichtag =
     VAR _stichtag = [Letzter Stichtag]
     RETURN
         CALCULATE ( [NPL-Quote], dim_datum[datum] = _stichtag )
+// Format: 0.00%
 
 NPL-Quote Vorjahr =
     VAR _stichtag = [Letzter Stichtag]
     VAR _monat = YEAR ( _stichtag ) * 100 + MONTH ( _stichtag )
     RETURN
         CALCULATE ( [NPL-Quote], FILTER ( ALL ( dim_datum ), dim_datum[monat_sort] = _monat - 100 ) )
+// Format: 0.00%
 
 NPL-Quote Veränderung VJ (pp) =
     ( [NPL-Quote Stichtag] - [NPL-Quote Vorjahr] ) * 100
-// Format: Dezimalzahl, 2 Dezimalstellen → Anzeige in Prozentpunkten
+// Format: +0.00;-0.00;0.00
+
+NPL Volumen Stichtag =
+    VAR _stichtag = [Letzter Stichtag]
+    RETURN
+        CALCULATE ( [NPL Volumen], dim_datum[datum] = _stichtag )
+// Format: #,0 €
 
 
-// ---------- Neugeschäft ----------------------------------------------
+// ---------- Neugeschäft -------------------------------------------------
 
 Neugeschäft Volumen =
     SUM ( fact_neugeschaeft[volumen] )
-// Format: Währung €, 0 Dezimalstellen
+// Format: #,0 €
 
 Neugeschäft Anzahl =
     SUM ( fact_neugeschaeft[anzahl_kredite] )
+// Format: #,0
 
 Neugeschäft Zins =
     DIVIDE ( SUM ( fact_neugeschaeft[volumen_x_zins] ), [Neugeschäft Volumen] ) / 100
-// Format: Prozent, 2 Dezimalstellen
+// Format: 0.00%
 
 
-// ---------- Expected Loss (Stichtag 30.09.2026) -----------------------
+// ---------- Expected Loss -----------------------------------------------
 
 EAD =
     SUM ( fact_expected_loss[ead] )
-// Format: Währung €, 0 Dezimalstellen
+// Format: #,0 €
 
 Expected Loss =
     SUM ( fact_expected_loss[expected_loss] )
-// Format: Währung €, 0 Dezimalstellen
+// Format: #,0 €
 
 EL-Quote =
     DIVIDE ( [Expected Loss], [EAD] )
-// Format: Prozent, 3 Dezimalstellen
+// Format: 0.000%
 
 PD gewichtet =
     DIVIDE ( SUMX ( fact_expected_loss, fact_expected_loss[ead] * fact_expected_loss[pd_12m] ), [EAD] )
-// Format: Prozent, 2 Dezimalstellen
+// Format: 0.00%
 
 LGD gewichtet =
-    DIVIDE (
-        [Expected Loss],
-        SUMX ( fact_expected_loss, fact_expected_loss[ead] * fact_expected_loss[pd_12m] )
-    )
-// Format: Prozent, 1 Dezimalstelle
+    DIVIDE ( [Expected Loss], SUMX ( fact_expected_loss, fact_expected_loss[ead] * fact_expected_loss[pd_12m] ) )
+// Format: 0.0%
 
 
-// ---------- Vintage --------------------------------------------------
+// ---------- Pricing -----------------------------------------------------
+
+Risikokosten =
+    [PD gewichtet] * [LGD gewichtet]
+// Format: 0.00%
+
+Risikoadjustierte Marge =
+    // Sollzins Neugeschäft − Refinanzierung (Annahme 3,0 %) − Risikokosten (PD × LGD)
+    [Neugeschäft Zins] - 3 / 100 - [Risikokosten]
+// Format: 0.00%
+
+
+// ---------- Vintage -----------------------------------------------------
 
 Ausfallrate kumuliert =
     DIVIDE (
         CALCULATE ( SUM ( fact_vintage[ausfaelle_kumuliert] ), fact_vintage[repraesentativ] = 1 ),
         CALCULATE ( SUM ( fact_vintage[kredite_beobachtbar] ), fact_vintage[repraesentativ] = 1 )
     )
-// Format: Prozent, 2 Dezimalstellen
+// Format: 0.00%

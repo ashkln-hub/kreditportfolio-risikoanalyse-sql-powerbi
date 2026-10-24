@@ -1,0 +1,79 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "44a15c2ab73e2b4d65ad",
+  "position": {
+    "x": 852,
+    "y": 386,
+    "z": 6000,
+    "height": 324,
+    "width": 408,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Kernaussagen",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13294B"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Der Jahrgang 2023 hat nach 24 Monaten eine kumulierte Ausfallrate von rund 4,1 % – etwa 1 Prozentpunkt mehr als der Jahrgang 2021 (3,1 %).",
+                    "textStyle": {
+                      "fontSize": "10pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Ursache im Modell: Kredite aus der Phase von Zinswende und hoher Inflation (07/2022 – 12/2023) haben ein höheres Ausfallrisiko.",
+                    "textStyle": {
+                      "fontSize": "10pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Der Jahrgang 2024 liegt nach 12 Monaten mit 1,7 % bereits wieder unter 2023 (2,0 %).",
+                    "textStyle": {
+                      "fontSize": "10pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Hinweis: Ein Kurvenpunkt wird nur gezeigt, wenn mind. 90 % des Jahrgangs diesen Laufzeitmonat erreicht haben.",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#4F5B6B"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

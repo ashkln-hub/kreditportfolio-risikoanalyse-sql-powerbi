@@ -97,18 +97,38 @@ Alle Ergebnistabellen: [`ergebnisse/ERGEBNISSE.md`](ergebnisse/ERGEBNISSE.md)
 
 ## Power-BI-Dashboard
 
-Das Datenmodell für Power BI ist ein **Sternschema** mit vier Dimensionen (`dim_datum`, `dim_produkt`,
-`dim_region`, `dim_rating`) und vier Faktentabellen (`fact_bestand_monat`, `fact_neugeschaeft`,
-`fact_vintage`, `fact_expected_loss`).
+Interaktiver Bericht mit vier Seiten und synchronisierten Filtern für Zeitraum, Produkt und Region.
+Alle Kennzahlen stimmen mit den SQL-Ergebnissen überein (z. B. Bestand 714,8 Mio. €, NPL-Quote 1,02 %,
+Expected Loss 1,54 Mio. €).
+
+**1 · Portfolioübersicht**
+![Portfolioübersicht](powerbi/screenshots/01_portfolioubersicht.png)
+
+**2 · Risikoentwicklung**
+![Risikoentwicklung](powerbi/screenshots/02_risikoentwicklung.png)
+
+**3 · Vintage-Analyse**
+![Vintage-Analyse](powerbi/screenshots/03_vintage_analyse.png)
+
+**4 · Expected Loss & Pricing**
+![Expected Loss & Pricing](powerbi/screenshots/04_expected_loss_pricing.png)
+
+**Datenmodell:** Sternschema mit vier Dimensionen (`dim_datum`, `dim_produkt`, `dim_region`, `dim_rating`)
+und vier Faktentabellen (`fact_bestand_monat`, `fact_neugeschaeft`, `fact_vintage`, `fact_expected_loss`),
+Daten per Power Query aus den CSV-Dateien geladen.
 
 | Ordner / Datei | Inhalt |
 |---|---|
+| `powerbi/Kreditportfolio_Dashboard.pbix` | Fertiger Bericht für Power BI Desktop |
+| `powerbi/Kreditportfolio_Dashboard.pdf` | PDF-Export aller vier Seiten |
+| `powerbi/Kreditportfolio_Dashboard.pbip` + Ordner `.Report` / `.SemanticModel` | Derselbe Bericht als Power-BI-Projekt (TMDL/PBIR) – versionierbar und im Browser lesbar |
+| `powerbi/measures.dax` | Alle 25 DAX-Measures (NPL-Quote, Vorjahresvergleich, Expected Loss, risikoadjustierte Marge, Vintage …) |
 | `powerbi/daten/` | Dimensions- und Faktentabellen als CSV |
-| `powerbi/measures.dax` | 20 DAX-Measures (NPL-Quote, Vorjahresvergleich, Expected Loss, Vintage-Ausfallrate …) |
 | `powerbi/theme_kreditportfolio.json` | Farbdesign des Berichts |
-| `powerbi/ANLEITUNG_POWER_BI.md` | Aufbau der vier Berichtsseiten Schritt für Schritt |
+| `powerbi/ANLEITUNG_POWER_BI.md` | Aufbau des Berichts Schritt für Schritt |
 
-Berichtsseiten: **Portfolioübersicht** · **Risikoentwicklung** · **Vintage-Analyse** · **Expected Loss & Pricing**
+> **Daten aktualisieren nach dem Klonen:** In Power BI unter *Start → Daten transformieren → Parameter bearbeiten*
+> den Parameter `Datenordner` auf den lokalen Pfad zu `powerbi\daten\` setzen und anschließend *Aktualisieren*.
 
 ## Projektstruktur
 

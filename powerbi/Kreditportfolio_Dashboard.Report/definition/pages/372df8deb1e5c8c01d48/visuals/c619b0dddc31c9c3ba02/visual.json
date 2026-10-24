@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "c619b0dddc31c9c3ba02",
+  "position": {
+    "x": 518,
+    "y": 76,
+    "z": 7000,
+    "height": 96,
+    "width": 241,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Zins volumengewichtet Stichtag"
+                }
+              },
+              "queryRef": "_Measures.Zins volumengewichtet Stichtag",
+              "nativeQueryRef": "Zins volumengewichtet Stichtag",
+              "displayName": "Ø Zins (volumengewichtet)"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "227ae7dbc714bec927c2",
+  "position": {
+    "x": 332,
+    "y": 76,
+    "z": 6000,
+    "height": 96,
+    "width": 304,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "NPL-Quote Vorjahr"
+                }
+              },
+              "queryRef": "_Measures.NPL-Quote Vorjahr",
+              "nativeQueryRef": "NPL-Quote Vorjahr",
+              "displayName": "NPL-Quote Vorjahresmonat"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

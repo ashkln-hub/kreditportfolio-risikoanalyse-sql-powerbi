@@ -1,0 +1,172 @@
+table _Measures
+	lineageTag: 547e7bf7-1448-54ec-8b6c-d3f3d245d016
+
+	measure 'Letzter Stichtag' = CALCULATE ( MAX ( fact_bestand_monat[datum] ) )
+		formatString: dd.MM.yyyy
+		displayFolder: Basis
+		lineageTag: 6f2cc71a-90fa-5041-b555-0764575d3002
+
+	measure Bestand = SUM ( fact_bestand_monat[restschuld] )
+		formatString: #,0 €
+		displayFolder: Bestand
+		lineageTag: 5cfcd7d6-03ea-53c5-ad80-13c3b6b21bfe
+
+	measure 'Bestand Stichtag' =
+			VAR _stichtag = [Letzter Stichtag]
+			RETURN
+			    CALCULATE ( [Bestand], dim_datum[datum] = _stichtag )
+		formatString: #,0 €
+		displayFolder: Bestand
+		lineageTag: 247cd858-8501-5b6c-8f47-00f157a2c7cd
+
+	measure 'Anzahl Kredite Stichtag' =
+			VAR _stichtag = [Letzter Stichtag]
+			RETURN
+			    CALCULATE ( SUM ( fact_bestand_monat[anzahl_kredite] ), dim_datum[datum] = _stichtag )
+		formatString: #,0
+		displayFolder: Bestand
+		lineageTag: 5455a8fb-b718-5d20-b182-00fa5cd23d5f
+
+	measure 'Zins volumengewichtet' = DIVIDE ( SUM ( fact_bestand_monat[restschuld_x_zins] ), SUM ( fact_bestand_monat[restschuld] ) ) / 100
+		formatString: 0.00%
+		displayFolder: Bestand
+		lineageTag: de005cc2-6b66-586d-aac1-24a27e0b7f51
+
+	measure 'Zins volumengewichtet Stichtag' =
+			VAR _stichtag = [Letzter Stichtag]
+			RETURN
+			    CALCULATE ( [Zins volumengewichtet], dim_datum[datum] = _stichtag )
+		formatString: 0.00%
+		displayFolder: Bestand
+		lineageTag: bfef5a24-cb32-502b-a018-4a611e3f3eca
+
+	measure 'Anteil am Bestand' = DIVIDE ( [Bestand Stichtag], CALCULATE ( [Bestand Stichtag], ALL ( fact_bestand_monat[verzugsstatus], fact_bestand_monat[verzugsstatus_sortierung] ) ) )
+		formatString: 0.00%
+		displayFolder: Bestand
+		lineageTag: 075f0aa0-eeb7-582b-80c4-0bf313a4edf2
+
+	measure 'NPL Volumen' = CALCULATE ( [Bestand], fact_bestand_monat[verzugsstatus_sortierung] = 4 )
+		formatString: #,0 €
+		displayFolder: Risiko
+		lineageTag: 3c591585-0b7b-5457-9269-b36e0b37d82a
+
+	measure NPL-Quote = DIVIDE ( [NPL Volumen], [Bestand] )
+		formatString: 0.00%
+		displayFolder: Risiko
+		lineageTag: 5d0b94a7-872a-5774-8717-de2102d40b0f
+
+	measure 'Verzugsquote 30+' = DIVIDE ( CALCULATE ( [Bestand], fact_bestand_monat[verzugsstatus_sortierung] > 1 ), [Bestand] )
+		formatString: 0.00%
+		displayFolder: Risiko
+		lineageTag: 1613bafe-f81d-57b8-a909-f9c6a92a2e04
+
+	measure 'NPL-Quote Stichtag' =
+			VAR _stichtag = [Letzter Stichtag]
+			RETURN
+			    CALCULATE ( [NPL-Quote], dim_datum[datum] = _stichtag )
+		formatString: 0.00%
+		displayFolder: Risiko
+		lineageTag: e572b1a8-a4ee-526b-8391-1885ca12801b
+
+	measure 'NPL-Quote Vorjahr' =
+			VAR _stichtag = [Letzter Stichtag]
+			VAR _monat = YEAR ( _stichtag ) * 100 + MONTH ( _stichtag )
+			RETURN
+			    CALCULATE ( [NPL-Quote], FILTER ( ALL ( dim_datum ), dim_datum[monat_sort] = _monat - 100 ) )
+		formatString: 0.00%
+		displayFolder: Risiko
+		lineageTag: f5335228-ef71-5c6c-8272-3c0cbbf462ce
+
+	measure 'NPL-Quote Veränderung VJ (pp)' = ( [NPL-Quote Stichtag] - [NPL-Quote Vorjahr] ) * 100
+		formatString: +0.00;-0.00;0.00
+		displayFolder: Risiko
+		lineageTag: 5398222d-0ab0-5364-b6fa-26bc32de8bcf
+
+	measure 'NPL Volumen Stichtag' =
+			VAR _stichtag = [Letzter Stichtag]
+			RETURN
+			    CALCULATE ( [NPL Volumen], dim_datum[datum] = _stichtag )
+		formatString: #,0 €
+		displayFolder: Risiko
+		lineageTag: ce19b150-af61-5fb9-a45b-2266cb6403bc
+
+	measure 'Neugeschäft Volumen' = SUM ( fact_neugeschaeft[volumen] )
+		formatString: #,0 €
+		displayFolder: Neugeschäft
+		lineageTag: e53a3e20-af03-50b0-8612-504d8caddaa5
+
+	measure 'Neugeschäft Anzahl' = SUM ( fact_neugeschaeft[anzahl_kredite] )
+		formatString: #,0
+		displayFolder: Neugeschäft
+		lineageTag: 72b22772-5cc6-5c85-94c6-e4cffa8353ca
+
+	measure 'Neugeschäft Zins' = DIVIDE ( SUM ( fact_neugeschaeft[volumen_x_zins] ), [Neugeschäft Volumen] ) / 100
+		formatString: 0.00%
+		displayFolder: Neugeschäft
+		lineageTag: b8503780-bed4-5537-97d6-529e4717d675
+
+	measure EAD = SUM ( fact_expected_loss[ead] )
+		formatString: #,0 €
+		displayFolder: Expected Loss
+		lineageTag: 18064db8-cf0c-5e39-9e01-d3cb4c416a70
+
+	measure 'Expected Loss' = SUM ( fact_expected_loss[expected_loss] )
+		formatString: #,0 €
+		displayFolder: Expected Loss
+		lineageTag: 307885f5-ed2d-511e-b2a4-f24856727e80
+
+	measure EL-Quote = DIVIDE ( [Expected Loss], [EAD] )
+		formatString: 0.000%
+		displayFolder: Expected Loss
+		lineageTag: 23d1b8cf-3379-51b2-aa49-d824568caccb
+
+	measure 'PD gewichtet' = DIVIDE ( SUMX ( fact_expected_loss, fact_expected_loss[ead] * fact_expected_loss[pd_12m] ), [EAD] )
+		formatString: 0.00%
+		displayFolder: Expected Loss
+		lineageTag: 8de12562-b1a5-586b-b674-565edc43d7c9
+
+	measure 'LGD gewichtet' = DIVIDE ( [Expected Loss], SUMX ( fact_expected_loss, fact_expected_loss[ead] * fact_expected_loss[pd_12m] ) )
+		formatString: 0.0%
+		displayFolder: Expected Loss
+		lineageTag: 11d85035-7524-5858-b42a-2e9c7f5e8678
+
+	measure Risikokosten = [PD gewichtet] * [LGD gewichtet]
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: 480b49a2-8618-573b-bbd9-4123e436148f
+
+	measure 'Risikoadjustierte Marge' =
+			// Sollzins Neugeschäft − Refinanzierung (Annahme 3,0 %) − Risikokosten (PD × LGD)
+			[Neugeschäft Zins] - 3 / 100 - [Risikokosten]
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: 52e89067-b6a2-5d09-8765-f00763048e08
+
+	measure 'Ausfallrate kumuliert' =
+			DIVIDE (
+			    CALCULATE ( SUM ( fact_vintage[ausfaelle_kumuliert] ), fact_vintage[repraesentativ] = 1 ),
+			    CALCULATE ( SUM ( fact_vintage[kredite_beobachtbar] ), fact_vintage[repraesentativ] = 1 )
+			)
+		formatString: 0.00%
+		displayFolder: Vintage
+		lineageTag: ef2def92-4a28-57e8-b9a0-1897fa90100a
+
+	column Spalte1
+		dataType: string
+		isHidden
+		lineageTag: 0081d7a6-a84f-52c7-922b-0a34380076a4
+		summarizeBy: none
+		sourceColumn: Spalte1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Quelle = #table(type table [Spalte1 = text], {})
+				in
+				    Quelle
+
+	annotation PBI_ResultType = Table
+

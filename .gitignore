@@ -6,3 +6,7 @@ __pycache__/
 .DS_Store
 *.pbix.bak
 ~$*
+
+# Power BI: lokale Einstellungen und Datencache des Projekts
+**/.pbi/localSettings.json
+**/.pbi/cache.abf

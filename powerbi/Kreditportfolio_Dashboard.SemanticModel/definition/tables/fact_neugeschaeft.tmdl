@@ -1,0 +1,83 @@
+table fact_neugeschaeft
+	lineageTag: f07d1ce9-4e4d-547d-8575-ec4a68d342f0
+
+	column datum
+		dataType: dateTime
+		isHidden
+		formatString: dd.MM.yyyy
+		lineageTag: 1a18daac-caef-53e8-8bc6-9dd92c5691bf
+		summarizeBy: none
+		sourceColumn: datum
+
+		annotation SummarizationSetBy = User
+
+	column produkt
+		dataType: string
+		isHidden
+		lineageTag: 75106b34-cf73-5cd9-a33c-f9cb1e221577
+		summarizeBy: none
+		sourceColumn: produkt
+
+		annotation SummarizationSetBy = User
+
+	column region
+		dataType: string
+		isHidden
+		lineageTag: a87ea15e-a038-5da4-bdfc-55b8de382187
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = User
+
+	column ratingklasse
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1ad88c5b-b650-5955-a090-58d7ebb1de29
+		summarizeBy: none
+		sourceColumn: ratingklasse
+
+		annotation SummarizationSetBy = User
+
+	column anzahl_kredite
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 89d868b9-d6e6-56e6-98f9-5efbeb0fceba
+		summarizeBy: sum
+		sourceColumn: anzahl_kredite
+
+		annotation SummarizationSetBy = User
+
+	column volumen
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: 221beb84-a8c7-58ea-932c-861edb2092c2
+		summarizeBy: sum
+		sourceColumn: volumen
+
+		annotation SummarizationSetBy = User
+
+	column volumen_x_zins
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: 102ade78-cc1d-50da-a81e-92bce2ba5921
+		summarizeBy: sum
+		sourceColumn: volumen_x_zins
+
+		annotation SummarizationSetBy = User
+
+	partition fact_neugeschaeft = m
+		mode: import
+		source =
+				let
+				    Quelle = Csv.Document(File.Contents(Datenordner & "fact_neugeschaeft.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Kopfzeilen = Table.PromoteHeaders(Quelle, [PromoteAllScalars = true]),
+				    Typen = Table.TransformColumnTypes(Kopfzeilen, {{"datum", type date}, {"produkt", type text}, {"region", type text}, {"ratingklasse", Int64.Type}, {"anzahl_kredite", Int64.Type}, {"volumen", type number}, {"volumen_x_zins", type number}}, "en-US")
+				in
+				    Typen
+
+	annotation PBI_ResultType = Table
+

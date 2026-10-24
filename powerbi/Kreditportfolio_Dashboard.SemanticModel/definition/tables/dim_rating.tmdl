@@ -1,0 +1,43 @@
+table dim_rating
+	lineageTag: 536cdcc3-d9f6-5c8f-8678-00b7493cd112
+
+	column ratingklasse
+		dataType: int64
+		formatString: 0
+		lineageTag: 3f429636-59e7-5d3d-ba52-ee592598ce5a
+		summarizeBy: none
+		sourceColumn: ratingklasse
+
+		annotation SummarizationSetBy = User
+
+	column risikoband
+		dataType: string
+		lineageTag: a86b180b-0a7e-5739-ac02-6836e30a3c93
+		summarizeBy: none
+		sourceColumn: risikoband
+		sortByColumn: risikoband_sortierung
+
+		annotation SummarizationSetBy = User
+
+	column risikoband_sortierung
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1afaa73d-3dc0-5443-a8d9-2b3288ce3cc0
+		summarizeBy: none
+		sourceColumn: risikoband_sortierung
+
+		annotation SummarizationSetBy = User
+
+	partition dim_rating = m
+		mode: import
+		source =
+				let
+				    Quelle = Csv.Document(File.Contents(Datenordner & "dim_rating.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Kopfzeilen = Table.PromoteHeaders(Quelle, [PromoteAllScalars = true]),
+				    Typen = Table.TransformColumnTypes(Kopfzeilen, {{"ratingklasse", Int64.Type}, {"risikoband", type text}, {"risikoband_sortierung", Int64.Type}}, "en-US")
+				in
+				    Typen
+
+	annotation PBI_ResultType = Table
+

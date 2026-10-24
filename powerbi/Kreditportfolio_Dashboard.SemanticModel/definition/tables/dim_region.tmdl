@@ -1,0 +1,23 @@
+table dim_region
+	lineageTag: a163c948-e92b-56b6-bd59-2a7914ea7e0e
+
+	column region
+		dataType: string
+		lineageTag: f1482a00-ef46-5a16-bc36-807c42e4d15e
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = User
+
+	partition dim_region = m
+		mode: import
+		source =
+				let
+				    Quelle = Csv.Document(File.Contents(Datenordner & "dim_region.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Kopfzeilen = Table.PromoteHeaders(Quelle, [PromoteAllScalars = true]),
+				    Typen = Table.TransformColumnTypes(Kopfzeilen, {{"region", type text}}, "en-US")
+				in
+				    Typen
+
+	annotation PBI_ResultType = Table
+

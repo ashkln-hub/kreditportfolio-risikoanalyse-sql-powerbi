@@ -1,0 +1,5 @@
+expression Datenordner = "C:\Users\kila5\OneDrive\Desktop\Lebenslauf_Anschreiben\GitHub_Projekte\kreditportfolio-risikoanalyse-sql-powerbi\powerbi\daten\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 832024e1-0262-5700-a891-e675eb243e73
+
+	annotation PBI_ResultType = Text
+

@@ -1,0 +1,50 @@
+table dim_produkt
+	lineageTag: b1763ad5-e06d-51a8-be9e-bdb3b584dd2a
+
+	column produkt
+		dataType: string
+		lineageTag: 24e194fc-f197-5ef8-93f4-0bba13781551
+		summarizeBy: none
+		sourceColumn: produkt
+		sortByColumn: sortierung
+
+		annotation SummarizationSetBy = User
+
+	column produktgruppe
+		dataType: string
+		lineageTag: 27853f24-3de3-5cbd-8da8-28006b086e47
+		summarizeBy: none
+		sourceColumn: produktgruppe
+
+		annotation SummarizationSetBy = User
+
+	column sicherheit
+		dataType: string
+		lineageTag: 70e541e3-5580-5bf0-a8a8-440e5927c3e8
+		summarizeBy: none
+		sourceColumn: sicherheit
+
+		annotation SummarizationSetBy = User
+
+	column sortierung
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f38f2cb5-ece5-575a-b477-4e649edac9c0
+		summarizeBy: none
+		sourceColumn: sortierung
+
+		annotation SummarizationSetBy = User
+
+	partition dim_produkt = m
+		mode: import
+		source =
+				let
+				    Quelle = Csv.Document(File.Contents(Datenordner & "dim_produkt.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Kopfzeilen = Table.PromoteHeaders(Quelle, [PromoteAllScalars = true]),
+				    Typen = Table.TransformColumnTypes(Kopfzeilen, {{"produkt", type text}, {"produktgruppe", type text}, {"sicherheit", type text}, {"sortierung", Int64.Type}}, "en-US")
+				in
+				    Typen
+
+	annotation PBI_ResultType = Table
+

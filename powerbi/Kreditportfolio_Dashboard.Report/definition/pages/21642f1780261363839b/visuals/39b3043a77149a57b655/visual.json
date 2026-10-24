@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "39b3043a77149a57b655",
+  "position": {
+    "x": 644,
+    "y": 76,
+    "z": 7000,
+    "height": 96,
+    "width": 304,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "NPL-Quote Veränderung VJ (pp)"
+                }
+              },
+              "queryRef": "_Measures.NPL-Quote Veränderung VJ (pp)",
+              "nativeQueryRef": "NPL-Quote Veränderung VJ (pp)",
+              "displayName": "Veränderung ggü. Vorjahr (pp)"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

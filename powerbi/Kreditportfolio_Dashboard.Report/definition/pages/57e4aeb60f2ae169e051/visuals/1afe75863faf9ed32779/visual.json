@@ -1,0 +1,188 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "1afe75863faf9ed32779",
+  "position": {
+    "x": 20,
+    "y": 182,
+    "z": 10000,
+    "height": 528,
+    "width": 760,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_produkt"
+                    }
+                  },
+                  "Property": "produkt"
+                }
+              },
+              "queryRef": "dim_produkt.produkt",
+              "nativeQueryRef": "produkt",
+              "displayName": "Produkt",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_rating"
+                    }
+                  },
+                  "Property": "risikoband"
+                }
+              },
+              "queryRef": "dim_rating.risikoband",
+              "nativeQueryRef": "risikoband",
+              "displayName": "Risikoband",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "EAD"
+                }
+              },
+              "queryRef": "_Measures.EAD",
+              "nativeQueryRef": "EAD",
+              "displayName": "EAD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "PD gewichtet"
+                }
+              },
+              "queryRef": "_Measures.PD gewichtet",
+              "nativeQueryRef": "PD gewichtet",
+              "displayName": "PD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "LGD gewichtet"
+                }
+              },
+              "queryRef": "_Measures.LGD gewichtet",
+              "nativeQueryRef": "LGD gewichtet",
+              "displayName": "LGD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Expected Loss"
+                }
+              },
+              "queryRef": "_Measures.Expected Loss",
+              "nativeQueryRef": "Expected Loss",
+              "displayName": "Expected Loss"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "EL-Quote"
+                }
+              },
+              "queryRef": "_Measures.EL-Quote",
+              "nativeQueryRef": "EL-Quote",
+              "displayName": "EL-Quote"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Expected Loss nach Produkt und Risikoband'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#13294B'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

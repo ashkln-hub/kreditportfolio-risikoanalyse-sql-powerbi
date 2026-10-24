@@ -1,0 +1,52 @@
+relationship 0f9a6570-cb2a-51a5-8bee-eb29525631c0
+	fromColumn: fact_bestand_monat.datum
+	toColumn: dim_datum.datum
+
+relationship e4352749-3989-55b2-891c-2b3e6223e747
+	fromColumn: fact_neugeschaeft.datum
+	toColumn: dim_datum.datum
+
+relationship e425ff3c-6947-5135-8458-970883976301
+	fromColumn: fact_expected_loss.datum
+	toColumn: dim_datum.datum
+
+relationship 3b734b32-69bb-51ca-9db7-57f48f6b34e9
+	fromColumn: fact_bestand_monat.produkt
+	toColumn: dim_produkt.produkt
+
+relationship 7cb05720-b9e3-57a8-8dae-052011dd37c6
+	fromColumn: fact_neugeschaeft.produkt
+	toColumn: dim_produkt.produkt
+
+relationship a8460f7b-c8cf-51ca-ad50-e684302c81ab
+	fromColumn: fact_expected_loss.produkt
+	toColumn: dim_produkt.produkt
+
+relationship 92029dde-92ba-51c5-96ce-f45cb15ea135
+	fromColumn: fact_vintage.produkt
+	toColumn: dim_produkt.produkt
+
+relationship 57ee3f11-05a6-5afe-95f0-97014d8c00cd
+	fromColumn: fact_bestand_monat.region
+	toColumn: dim_region.region
+
+relationship 1e949451-02d7-56df-b572-8d4942f6e63d
+	fromColumn: fact_neugeschaeft.region
+	toColumn: dim_region.region
+
+relationship 43a72d5c-3b99-56df-b338-deed69596c27
+	fromColumn: fact_expected_loss.region
+	toColumn: dim_region.region
+
+relationship 84dfd83e-b7d1-50ef-ac09-bf041e90487f
+	fromColumn: fact_bestand_monat.ratingklasse
+	toColumn: dim_rating.ratingklasse
+
+relationship 59a28be1-19ac-5276-bdc1-a602be666fbb
+	fromColumn: fact_neugeschaeft.ratingklasse
+	toColumn: dim_rating.ratingklasse
+
+relationship 131d1389-f757-551a-9749-06bd524dec3b
+	fromColumn: fact_expected_loss.ratingklasse
+	toColumn: dim_rating.ratingklasse
+

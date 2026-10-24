@@ -1,0 +1,27 @@
+model Model
+	culture: de-DE
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Datenordner","dim_datum","dim_produkt","dim_region","dim_rating","fact_bestand_monat","fact_neugeschaeft","fact_vintage","fact_expected_loss","_Measures"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table _Measures
+ref table dim_datum
+ref table dim_produkt
+ref table dim_region
+ref table dim_rating
+ref table fact_bestand_monat
+ref table fact_neugeschaeft
+ref table fact_vintage
+ref table fact_expected_loss
+
+ref cultureInfo de-DE
+

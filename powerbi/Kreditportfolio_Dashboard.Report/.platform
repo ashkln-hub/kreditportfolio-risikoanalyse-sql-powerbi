@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Kreditportfolio_Dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "509d5ae2-7025-5e21-a4af-9d73368b52e4"
+  }
+}

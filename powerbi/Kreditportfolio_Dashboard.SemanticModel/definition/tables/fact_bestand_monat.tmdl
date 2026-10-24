@@ -1,0 +1,104 @@
+table fact_bestand_monat
+	lineageTag: 176d94c7-e430-512c-aeb5-e5b01925a4b3
+
+	column datum
+		dataType: dateTime
+		isHidden
+		formatString: dd.MM.yyyy
+		lineageTag: 0a01a1dd-331b-526d-9891-24e862f4f9b5
+		summarizeBy: none
+		sourceColumn: datum
+
+		annotation SummarizationSetBy = User
+
+	column produkt
+		dataType: string
+		isHidden
+		lineageTag: 486ad809-28aa-5721-9b4a-04addc60d3d0
+		summarizeBy: none
+		sourceColumn: produkt
+
+		annotation SummarizationSetBy = User
+
+	column region
+		dataType: string
+		isHidden
+		lineageTag: ff76386d-bf1f-5e28-b97c-415ad5bdc403
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = User
+
+	column ratingklasse
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e4a341ce-0a6f-5150-acbc-de47acad0eee
+		summarizeBy: none
+		sourceColumn: ratingklasse
+
+		annotation SummarizationSetBy = User
+
+	column verzugsstatus
+		dataType: string
+		lineageTag: 4cc055b3-8f87-5125-b8de-e35b47673ec4
+		summarizeBy: none
+		sourceColumn: verzugsstatus
+		sortByColumn: verzugsstatus_sortierung
+
+		annotation SummarizationSetBy = User
+
+	column verzugsstatus_sortierung
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d7c5398b-9d7b-5f3e-a09d-e6a3513c5e50
+		summarizeBy: none
+		sourceColumn: verzugsstatus_sortierung
+
+		annotation SummarizationSetBy = User
+
+	column anzahl_kredite
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 623e581f-f1b1-5892-8330-c221beb58d2c
+		summarizeBy: sum
+		sourceColumn: anzahl_kredite
+
+		annotation SummarizationSetBy = User
+
+	column restschuld
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: d99eeb4d-237f-560a-91a8-791b9821c5c8
+		summarizeBy: sum
+		sourceColumn: restschuld
+
+		annotation SummarizationSetBy = User
+
+	column restschuld_x_zins
+		dataType: double
+		isHidden
+		formatString: #,0
+		lineageTag: 50320a0c-b0af-59af-bc47-87679f767783
+		summarizeBy: sum
+		sourceColumn: restschuld_x_zins
+
+		annotation SummarizationSetBy = User
+
+	partition fact_bestand_monat = m
+		mode: import
+		source =
+				let
+				    Quelle = Csv.Document(File.Contents(Datenordner & "fact_bestand_monat.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Kopfzeilen = Table.PromoteHeaders(Quelle, [PromoteAllScalars = true]),
+				    Typen = Table.TransformColumnTypes(Kopfzeilen, {{"datum", type date}, {"produkt", type text}, {"region", type text}, {"ratingklasse", Int64.Type}, {"verzugsstatus", type text}, {"anzahl_kredite", Int64.Type}, {"restschuld", type number}, {"restschuld_x_zins", type number}}, "en-US"),
+				    Sortierung = Table.AddColumn(Typen, "verzugsstatus_sortierung", each Number.From(Text.Start([verzugsstatus], 1)), Int64.Type),
+				    Bezeichnung = Table.TransformColumns(Sortierung, {{"verzugsstatus", each Text.AfterDelimiter(_, " "), type text}})
+				in
+				    Bezeichnung
+
+	annotation PBI_ResultType = Table
+

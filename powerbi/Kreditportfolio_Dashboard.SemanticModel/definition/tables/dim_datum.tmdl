@@ -1,0 +1,70 @@
+table dim_datum
+	lineageTag: adbaed98-c0a8-58e9-aa98-152891a7ebfb
+
+	column datum
+		dataType: dateTime
+		formatString: dd.MM.yyyy
+		lineageTag: e84a9a68-c916-5db5-81cb-137d42b14357
+		summarizeBy: none
+		sourceColumn: datum
+
+		annotation SummarizationSetBy = User
+
+	column jahr
+		dataType: int64
+		formatString: 0
+		lineageTag: c02f54d3-342f-506b-92c7-042195841a3d
+		summarizeBy: none
+		sourceColumn: jahr
+
+		annotation SummarizationSetBy = User
+
+	column quartal
+		dataType: string
+		lineageTag: fa33cb7e-f12b-5d28-80e7-4d52d1f1a6a2
+		summarizeBy: none
+		sourceColumn: quartal
+
+		annotation SummarizationSetBy = User
+
+	column monat_nr
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 95dca842-c3d6-58ba-9822-d92b29cb77c9
+		summarizeBy: none
+		sourceColumn: monat_nr
+
+		annotation SummarizationSetBy = User
+
+	column monat_jahr
+		dataType: string
+		lineageTag: e8a4f250-e281-58ed-a363-4f1a7a5db499
+		summarizeBy: none
+		sourceColumn: monat_jahr
+		sortByColumn: monat_sort
+
+		annotation SummarizationSetBy = User
+
+	column monat_sort
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e6973a2d-6da2-5ea9-8af3-8fefe253949e
+		summarizeBy: none
+		sourceColumn: monat_sort
+
+		annotation SummarizationSetBy = User
+
+	partition dim_datum = m
+		mode: import
+		source =
+				let
+				    Quelle = Csv.Document(File.Contents(Datenordner & "dim_datum.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Kopfzeilen = Table.PromoteHeaders(Quelle, [PromoteAllScalars = true]),
+				    Typen = Table.TransformColumnTypes(Kopfzeilen, {{"datum", type date}, {"jahr", Int64.Type}, {"quartal", type text}, {"monat_nr", Int64.Type}, {"monat_jahr", type text}, {"monat_sort", Int64.Type}}, "en-US")
+				in
+				    Typen
+
+	annotation PBI_ResultType = Table
+

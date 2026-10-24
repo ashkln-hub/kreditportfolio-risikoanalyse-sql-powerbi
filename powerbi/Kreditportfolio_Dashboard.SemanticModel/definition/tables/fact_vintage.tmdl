@@ -1,0 +1,72 @@
+table fact_vintage
+	lineageTag: ce994823-8aa7-5887-9732-960fd8af8653
+
+	column jahrgang
+		dataType: int64
+		formatString: 0
+		lineageTag: ab55e5fa-17ec-53a9-95f9-fa18c6845df1
+		summarizeBy: none
+		sourceColumn: jahrgang
+
+		annotation SummarizationSetBy = User
+
+	column produkt
+		dataType: string
+		isHidden
+		lineageTag: a5c4ce66-4732-5c16-aa4d-57d0da5d1ed9
+		summarizeBy: none
+		sourceColumn: produkt
+
+		annotation SummarizationSetBy = User
+
+	column monate_seit_auszahlung
+		dataType: int64
+		formatString: 0
+		lineageTag: 8f9e203e-91ef-5dc7-b4e3-f4defb60b839
+		summarizeBy: none
+		sourceColumn: monate_seit_auszahlung
+
+		annotation SummarizationSetBy = User
+
+	column kredite_beobachtbar
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 494b43c0-5eba-54bc-9fe7-314ff83c6dbb
+		summarizeBy: sum
+		sourceColumn: kredite_beobachtbar
+
+		annotation SummarizationSetBy = User
+
+	column ausfaelle_kumuliert
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: f9349346-cbeb-5311-b7ac-0b5300f3a20f
+		summarizeBy: sum
+		sourceColumn: ausfaelle_kumuliert
+
+		annotation SummarizationSetBy = User
+
+	column repraesentativ
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a5700ecb-d42e-56ca-8a01-8c54be8a7e54
+		summarizeBy: none
+		sourceColumn: repraesentativ
+
+		annotation SummarizationSetBy = User
+
+	partition fact_vintage = m
+		mode: import
+		source =
+				let
+				    Quelle = Csv.Document(File.Contents(Datenordner & "fact_vintage.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Kopfzeilen = Table.PromoteHeaders(Quelle, [PromoteAllScalars = true]),
+				    Typen = Table.TransformColumnTypes(Kopfzeilen, {{"jahrgang", Int64.Type}, {"produkt", type text}, {"monate_seit_auszahlung", Int64.Type}, {"kredite_beobachtbar", Int64.Type}, {"ausfaelle_kumuliert", Int64.Type}, {"repraesentativ", Int64.Type}}, "en-US")
+				in
+				    Typen
+
+	annotation PBI_ResultType = Table
+
