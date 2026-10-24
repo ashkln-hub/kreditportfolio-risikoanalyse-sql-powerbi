@@ -1,0 +1,33 @@
+{
+  "name": "Kreditportfolio",
+  "dataColors": ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"],
+  "background": "#FFFFFF",
+  "foreground": "#1F2933",
+  "tableAccent": "#13294B",
+  "good": "#1baf7a",
+  "neutral": "#eda100",
+  "bad": "#e34948",
+  "maximum": "#13294B",
+  "center": "#9AA7B8",
+  "minimum": "#EEF2F7",
+  "textClasses": {
+    "title":   { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#13294B" },
+    "header":  { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#13294B" },
+    "label":   { "fontFace": "Segoe UI", "fontSize": 10, "color": "#4F5B6B" },
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 24, "color": "#13294B" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } } }],
+        "border":     [{ "show": true, "color": { "solid": { "color": "#D5DBE3" } }, "radius": 6 }],
+        "title":      [{ "show": true, "fontColor": { "solid": { "color": "#13294B" } } }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#F4F6F9" } }, "transparency": 0 }]
+      }
+    }
+  }
+}

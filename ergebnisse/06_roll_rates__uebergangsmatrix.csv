@@ -1,0 +1,12 @@
+﻿von_status;nach_status;uebergaenge;anteil_prozent
+1 | vertragsgemäß;1 | vertragsgemäß;136614;97,83
+1 | vertragsgemäß;2 | 30 Tage;707;0,51
+1 | vertragsgemäß;5 | getilgt;2327;1,67
+2 | 30 Tage;1 | vertragsgemäß;251;35,25
+2 | 30 Tage;2 | 30 Tage;4;0,56
+2 | 30 Tage;3 | 60 Tage;450;63,2
+2 | 30 Tage;5 | getilgt;7;0,98
+3 | 60 Tage;1 | vertragsgemäß;251;56,03
+3 | 60 Tage;2 | 30 Tage;3;0,67
+3 | 60 Tage;4 | Ausfall (90+);182;40,63
+3 | 60 Tage;5 | getilgt;12;2,68

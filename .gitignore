@@ -1,0 +1,8 @@
+# Rohdaten und Datenbank werden lokal erzeugt (src/01 und src/02)
+data/
+
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+*.pbix.bak
+~$*

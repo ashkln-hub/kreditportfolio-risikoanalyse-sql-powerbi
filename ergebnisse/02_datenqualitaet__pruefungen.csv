@@ -1,0 +1,13 @@
+﻿pruefung;fehler
+Kredite ohne gültigen Kunden;0
+Doppelte Kredit-IDs;0
+Zinssatz außerhalb 0–20 %;0
+Baufinanzierung ohne Beleihungsauslauf;0
+Kapitaldienstquote über 100 %;0
+Performance-Sätze ohne Kredit;0
+Stichtag vor Auszahlung;0
+Negative Restschuld;0
+Status und Tage überfällig widersprüchlich;0
+Ausfall ohne Verwertungsdatensatz;0
+Verwertungserlös größer als EAD;0
+Lücken in der Monatshistorie;0
