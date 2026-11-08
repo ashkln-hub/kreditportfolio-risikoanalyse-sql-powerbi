@@ -7,6 +7,12 @@ Regionalbank in Niedersachsen, 01/2021 bis 09/2026.
 Eigenes Portfolio-Projekt (10/2026) zur Vertiefung von **SQL** und **Power BI**, ergänzend zur
 Weiterbildung „Python und Data Science im Finanzwesen“ (IU Internationale Hochschule).
 
+![Dashboard: Portfolioübersicht](powerbi/screenshots/01_portfolioubersicht.png)
+
+![Dashboard: Expected Loss & Pricing](powerbi/screenshots/04_expected_loss_pricing.png)
+
+Alle vier Dashboard-Seiten: siehe Abschnitt [Power-BI-Dashboard](#power-bi-dashboard).
+
 ## Leitfragen
 
 1. Wie entwickeln sich Zahlungsrückstände und Ausfälle im Portfolio und welche Jahrgänge sind auffällig?
@@ -20,9 +26,9 @@ Weiterbildung „Python und Data Science im Finanzwesen“ (IU Internationale Ho
 | Kreditbestand | **714,8 Mio. €** (12.410 Kredite) | 85 % Baufinanzierung, 15 % Konsumentenkredite |
 | NPL-Quote (90+ Tage Verzug) | **1,02 %** | Höchststand 1,43 % im Juli 2024, seitdem rückläufig (−0,24 pp ggü. Vorjahr) |
 | Expected Loss | **1,54 Mio. €**, EL-Quote **0,22 %** | Ratenkredite: EL-Quote 1,20 %, Baufinanzierung: 0,09 % |
-| LGD (abgeschlossene Verwertungen) | Ratenkredit **64 %**, Autokredit **38 %**, Baufinanzierung **15 %** | Sicherheiten (Kfz, Grundschuld) senken den Verlust deutlich |
+| LGD (abgeschlossene Verwertungen) | Ratenkredit **64 %**, Autokredit **38 %**, Baufinanzierung **15 %** | Sicherheiten (Kfz, Grundschuld) senken den Verlust deutlich. Baufinanzierung basiert nur auf 18 Fällen |
 | Vintage 2023 | **4,08 %** kumulierte Ausfälle nach 24 Monaten | vs. 3,08 % beim Jahrgang 2021, Effekt von Zinswende und Inflation |
-| Risikoadjustierte Marge | Ratingklassen **9 und 10 negativ** (−0,06 pp bzw. −4,31 pp) | Zinsaufschlag deckt die Risikokosten in den schlechtesten Klassen nicht |
+| Risikoadjustierte Marge | Ratingklassen **9 und 10 negativ** (−0,06 pp bzw. −4,31 pp) | Zinsaufschlag deckt die Risikokosten in den schlechtesten Klassen nicht. Kleine Fallzahl (117 bzw. 41 Kredite im Neugeschäft ab 2024), der Wert für Klasse 10 ist daher unsicher |
 
 **Empfehlungen**
 
@@ -119,12 +125,12 @@ Daten per Power Query aus den CSV-Dateien geladen.
 
 | Ordner / Datei | Inhalt |
 |---|---|
-| `powerbi/Kreditportfolio_Dashboard.pbix` | Fertiger Bericht für Power BI Desktop |
+| `powerbi/Kreditportfolio_Dashboard.pbix` | **Hier starten:** fertiger Bericht für Power BI Desktop |
 | `powerbi/Kreditportfolio_Dashboard.pdf` | PDF-Export aller vier Seiten |
-| `powerbi/Kreditportfolio_Dashboard.pbip` + Ordner `.Report` / `.SemanticModel` | Derselbe Bericht als Power-BI-Projekt (TMDL/PBIR), versionierbar und im Browser lesbar |
+| `powerbi/Kreditportfolio_Dashboard.pbip` + Ordner `.Report` / `.SemanticModel` | Derselbe Bericht als Power-BI-Projekt (TMDL/PBIR), nur für Versionierung und zum Lesen im Browser. Zum Öffnen reicht die `.pbix` |
 | `powerbi/measures.dax` | Alle 25 DAX-Measures (NPL-Quote, Vorjahresvergleich, Expected Loss, risikoadjustierte Marge, Vintage …) |
 | `powerbi/daten/` | Dimensions- und Faktentabellen als CSV |
-| `powerbi/theme_kreditportfolio.json` | Farbdesign des Berichts |
+| `powerbi/theme_kreditportfolio.json` | Farbdesign zum manuellen Laden (Anleitung). Der Bericht selbst nutzt die Kopie in `.Report/StaticResources` |
 | `powerbi/ANLEITUNG_POWER_BI.md` | Aufbau des Berichts Schritt für Schritt |
 
 > **Daten aktualisieren nach dem Klonen:** In Power BI unter *Start > Daten transformieren > Parameter bearbeiten*
@@ -152,7 +158,9 @@ python src/02_sql_pipeline.py
 python src/03_grafiken.py
 ```
 
-Laufzeit ca. 30 Sekunden. Die Datenbank `data/kreditportfolio.db` kann zusätzlich mit jedem SQLite-Client
+Laufzeit ca. 30 Sekunden. Der Zufallsgenerator hat einen festen Seed, ein erneuter Lauf erzeugt dieselben
+Daten und überschreibt `ergebnisse/` und `powerbi/daten/` mit identischen Dateien (getestet mit pandas 3.1,
+NumPy 2.5, Matplotlib 3.11). Die Datenbank `data/kreditportfolio.db` kann zusätzlich mit jedem SQLite-Client
 (z. B. DB Browser for SQLite oder DBeaver) geöffnet werden, um die Abfragen in `sql/` einzeln auszuführen.
 
 ## Methodische Hinweise
@@ -163,8 +171,13 @@ Laufzeit ca. 30 Sekunden. Die Datenbank `data/kreditportfolio.db` kann zusätzli
   entsprechend unsicher.
 - **Regionale Unterschiede** der NPL-Quote entstehen vor allem durch einzelne große Baufinanzierungen im
   Ausfall (Konzentrationsrisiko), nicht durch die Region selbst.
-- Die Refinanzierungskosten in der Margenanalyse (3,0 % p. a.) sind eine vereinfachte Annahme. Betriebs- und
+- Die Refinanzierungskosten in der Margenanalyse (3,0 % p. a.) sind eine vereinfachte Annahme (CTE `annahmen` in
+  `sql/08_risikoadjustierte_marge.sql`) und gelten nur für Konsumentenkredite. Betriebs- und
   Eigenkapitalkosten sind nicht berücksichtigt.
+
+## Lizenz
+
+MIT, siehe [`LICENSE`](LICENSE). Die Daten sind synthetisch.
 
 ## Werkzeuge
 

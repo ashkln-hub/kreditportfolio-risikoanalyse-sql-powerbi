@@ -3,11 +3,14 @@
 -- Deckt der Zinsaufschlag je Ratingklasse die erwarteten Verluste?
 --   Risikokosten p. a. = PD (12 Monate) × LGD
 --   Risikoadjustierte Marge = Sollzins − Refinanzierung − Risikokosten
--- Annahme Refinanzierungskosten: Konsumentenkredite 3,0 % p. a.
+-- Annahme Refinanzierungskosten: Konsumentenkredite 3,0 % p. a. (CTE „annahmen“, hier ändern)
 -- =====================================================================
 
 -- @ergebnis: marge_nach_rating_konsumentenkredite
-WITH pd_tab AS (
+WITH annahmen AS (
+    SELECT 3.00 AS refinanzierung_prozent
+),
+pd_tab AS (
     SELECT k.ratingklasse,
            1.0 * SUM(CASE WHEN v.ausfalldatum > p.stichtag
                            AND v.ausfalldatum <= date(p.stichtag, '+12 months') THEN 1 ELSE 0 END) / COUNT(*) AS pd
@@ -35,10 +38,11 @@ neugeschaeft AS (   -- Neugeschäft ab 2024 (aktuelles Zinsniveau)
 SELECT n.ratingklasse,
        n.anzahl                                                AS kredite_neugeschaeft_ab_2024,
        ROUND(n.zins, 2)                                        AS sollzins_prozent,
-       3.00                                                    AS refinanzierung_prozent,
+       a.refinanzierung_prozent                                AS refinanzierung_prozent,
        ROUND(100 * d.pd * l.lgd, 2)                            AS risikokosten_prozent,
-       ROUND(n.zins - 3.00 - 100 * d.pd * l.lgd, 2)            AS risikoadj_marge_prozent
+       ROUND(n.zins - a.refinanzierung_prozent - 100 * d.pd * l.lgd, 2)            AS risikoadj_marge_prozent
 FROM neugeschaeft n
 JOIN pd_tab d ON d.ratingklasse = n.ratingklasse
 CROSS JOIN lgd_tab l
+CROSS JOIN annahmen a
 ORDER BY n.ratingklasse;
