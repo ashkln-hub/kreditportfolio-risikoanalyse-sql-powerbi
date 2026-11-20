@@ -1,0 +1,5 @@
+﻿stufe;bezeichnung;anzahl_kredite;ead_mio_eur;pd_gewichtet_prozent;lgd_prozent;verlust_tsd_eur
+1;vertragsgemäß (12-Monats-EL, Rating-PD);12104;704,87;0,66;31,2;1461,0
+2;Rückstand 30/60 Tage (12-Monats-EL, Verzugs-PD);91;2,61;32,58;34,8;296,0
+3;Ausfall 90+ (Verlustschätzung, PD = 100 %);215;7,28;100,0;30,5;2220,0
+Gesamt;Bestand gesamt;12410;714,76;1,79;31,0;3977,0

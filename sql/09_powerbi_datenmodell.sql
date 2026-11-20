@@ -112,41 +112,47 @@ JOIN mob ON b.mob_beobachtbar >= mob.m
 JOIN groesse g ON g.jahrgang = b.jahrgang AND g.produkt = b.produkt
 GROUP BY b.jahrgang, b.produkt, mob.m;
 
+-- Expected Loss je Stufe (in Anlehnung an IFRS 9, kein vollständiges IFRS-9-Modell).
+-- Eine Faktentabelle statt zwei: Ausfälle (Stufe 3) haben dieselbe Körnung und dieselben
+-- Dimensionen wie lebende Kredite. Mit PD = 100 % gilt EL = PD × LGD × EAD für alle Zeilen,
+-- die Spalte "stufe" trennt die Teilsummen. Basis ist die Sicht v_el_basis aus sql/07.
 DROP TABLE IF EXISTS fact_expected_loss;
 CREATE TABLE fact_expected_loss AS
-WITH pd_tab AS (
-    SELECT CASE WHEN k.produkt = 'Baufinanzierung' THEN 'Immobilienkredit' ELSE 'Konsumentenkredit' END AS produktgruppe,
-           k.ratingklasse,
-           1.0 * SUM(CASE WHEN v.ausfalldatum > p.stichtag
-                           AND v.ausfalldatum <= date(p.stichtag, '+12 months') THEN 1 ELSE 0 END) / COUNT(*) AS pd
-    FROM performance_monat p
-    JOIN kredite k ON k.kredit_id = p.kredit_id
-    LEFT JOIN verwertung v ON v.kredit_id = p.kredit_id
-    WHERE p.stichtag IN ('2022-09-30', '2023-09-30', '2024-09-30', '2025-09-30')
-      AND p.status IN ('Laufend', 'Rückstand')
-    GROUP BY produktgruppe, k.ratingklasse
-),
-lgd_tab AS (
-    SELECT k.produkt, 1 - SUM(v.verwertungserloes) / SUM(v.ead) AS lgd
-    FROM verwertung v JOIN kredite k ON k.kredit_id = v.kredit_id
-    WHERE v.status = 'abgeschlossen'
-    GROUP BY k.produkt
+SELECT stichtag                                   AS datum,
+       produkt,
+       region,
+       ratingklasse,
+       verzugsstatus,
+       stufe,
+       COUNT(*)                                   AS anzahl_kredite,
+       ROUND(SUM(ead), 2)                         AS ead,
+       ROUND(MAX(pd_rating_roh), 5)               AS pd_rating_roh,   -- beobachtete Rating-PD
+       ROUND(MAX(pd_rating), 5)                   AS pd_rating,       -- Rating-PD nach Floor
+       ROUND(MAX(pd_12m), 5)                      AS pd_12m,          -- verwendete PD (Rating, Verzug oder 100 %)
+       ROUND(MAX(lgd_nominal), 4)                 AS lgd_nominal,
+       ROUND(MAX(lgd), 4)                         AS lgd,             -- ökonomische LGD
+       ROUND(SUM(ead * pd_12m * lgd), 2)          AS expected_loss
+FROM v_el_basis
+GROUP BY stichtag, produkt, region, ratingklasse, verzugsstatus, stufe;
+
+-- Risikokosten je Produkt und Ratingklasse für die Marge nach Risikokosten (identisch mit sql/08).
+-- Raten- und Autokredite erhalten dieselben gepoolten Werte. Baufinanzierung ist nicht Teil der Margenanalyse.
+DROP TABLE IF EXISTS fact_risikokosten;
+CREATE TABLE fact_risikokosten AS
+WITH lgd_konsum AS (
+    SELECT 1 - SUM(erloes_netto_barwert) / SUM(ead) AS lgd
+    FROM v_verwertung_bewertet
+    WHERE produktgruppe = 'Konsumentenkredit'
 )
-SELECT p.stichtag                                AS datum,
-       k.produkt,
-       c.region,
-       k.ratingklasse,
-       COUNT(*)                                  AS anzahl_kredite,
-       ROUND(SUM(p.restschuld), 2)               AS ead,
-       ROUND(MAX(d.pd), 5)                       AS pd_12m,
-       ROUND(MAX(l.lgd), 4)                      AS lgd,
-       ROUND(SUM(p.restschuld) * MAX(d.pd) * MAX(l.lgd), 2) AS expected_loss
-FROM performance_monat p
-JOIN kredite k ON k.kredit_id = p.kredit_id
-JOIN kunden  c ON c.kunden_id = k.kunden_id
-JOIN pd_tab  d ON d.ratingklasse = k.ratingklasse AND d.produktgruppe = CASE WHEN k.produkt = 'Baufinanzierung' THEN 'Immobilienkredit' ELSE 'Konsumentenkredit' END
-JOIN lgd_tab l ON l.produkt = k.produkt
-WHERE p.stichtag = (SELECT MAX(stichtag) FROM performance_monat)
-  AND p.status IN ('Laufend', 'Rückstand')
-  AND p.restschuld > 0
-GROUP BY p.stichtag, k.produkt, c.region, k.ratingklasse;
+SELECT pr.produkt,
+       d.ratingklasse,
+       ROUND(d.pd, 6)                             AS pd_12m,
+       ROUND(d.pd_ohne_stress, 6)                 AS pd_12m_ohne_stress,
+       ROUND(l.lgd, 6)                            AS lgd,
+       (SELECT wert FROM annahme WHERE parameter = 'refinanzierung_pa') AS refinanzierung,
+       ROUND(d.pd * l.lgd, 6)                     AS risikokosten,
+       ROUND(d.pd_ohne_stress * l.lgd, 6)         AS risikokosten_ohne_stress
+FROM v_pd_rating d
+CROSS JOIN lgd_konsum l
+CROSS JOIN (SELECT 'Ratenkredit' AS produkt UNION ALL SELECT 'Autokredit') pr
+WHERE d.produktgruppe = 'Konsumentenkredit';

@@ -1,0 +1,7 @@
+﻿parameter;wert;datum;einheit;beschreibung
+refinanzierung_pa;0,03;;Anteil p. a.;Refinanzierungskosten Konsumentenkredite, fest und vereinfacht (Marge nach Risikokosten)
+pd_floor;0,0005;;Anteil;PD-Untergrenze 0,05 % je Ratingklasse, angelehnt an den Retail-PD-Floor nach Basel III final (CRR3)
+diskontsatz_pa;0,03;;Anteil p. a.;Diskontsatz für Verwertungserlöse über die Abwicklungsdauer (ökonomische LGD)
+workout_kosten;0,0;;Anteil der EAD;Interne Abwicklungskosten je Verwertung, Standard 0 % (ökonomische LGD)
+stressfenster_von;;2022-07-01;Datum;Beginn des im Generator eingebauten Stressaufschlags (PD × 1,25 für Auszahlungen ab diesem Datum)
+stressfenster_bis;;2023-12-31;Datum;Ende des Stressaufschlags (Auszahlungen bis einschließlich diesem Datum), Variante der Pricing-PD
