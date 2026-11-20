@@ -267,17 +267,17 @@ WITH w AS (
     SELECT SUM(CASE WHEN stufe < 3 THEN ead * pd_bisher     * lgd_nominal END) AS s1,
            SUM(CASE WHEN stufe < 3 THEN ead * pd_rating_roh * lgd_nominal END) AS s2,
            SUM(CASE WHEN stufe < 3 THEN ead * pd_rating     * lgd_nominal END) AS s3,
-           SUM(CASE WHEN stufe < 3 THEN ead * pd_12m        * lgd_nominal END) AS s4,
+           SUM(CASE WHEN stufe < 3 THEN ead * pd_rating     * lgd         END) AS s4,
            SUM(CASE WHEN stufe < 3 THEN ead * pd_12m        * lgd         END) AS s5,
            SUM(CASE WHEN stufe = 3 THEN ead                 * lgd         END) AS s6,
            SUM(CASE WHEN stufe = 3 THEN ead                 * lgd_nominal END) AS s6_nominal
     FROM v_el_basis
 )
 SELECT '1 Bisher: EL lebende Kredite (alte PD, nominale LGD)'                AS schritt, ROUND(s1 / 1e3, 0) AS wert_tsd_eur, NULL AS effekt_tsd_eur FROM w
-UNION ALL SELECT '2 Stufe 1: Rating-PD aus vertragsgemäßer Kohorte',               ROUND(s2 / 1e3, 0), ROUND((s2 - s1) / 1e3, 0) FROM w
+UNION ALL SELECT '2 Stufe 1: Rating-PD aus vertragsgemäßer Kohorte',          ROUND(s2 / 1e3, 0), ROUND((s2 - s1) / 1e3, 0) FROM w
 UNION ALL SELECT '3 PD-Floor 0,05 % (Annahme)',                               ROUND(s3 / 1e3, 0), ROUND((s3 - s2) / 1e3, 0) FROM w
-UNION ALL SELECT '4 Verzugs-PD für Kredite im Rückstand',                     ROUND(s4 / 1e3, 0), ROUND((s4 - s3) / 1e3, 0) FROM w
-UNION ALL SELECT '5 Ökonomische LGD (Abzinsung 3 %, Kosten 0 %) = EL lebend', ROUND(s5 / 1e3, 0), ROUND((s5 - s4) / 1e3, 0) FROM w
+UNION ALL SELECT '4 Ökonomische LGD (Abzinsung 3 %, Kosten 0 %)',             ROUND(s4 / 1e3, 0), ROUND((s4 - s3) / 1e3, 0) FROM w
+UNION ALL SELECT '5 Verzugs-PD für Kredite im Rückstand = EL lebend',         ROUND(s5 / 1e3, 0), ROUND((s5 - s4) / 1e3, 0) FROM w
 UNION ALL SELECT '6 Verlustschätzung Ausfälle (Stufe 3, ökonomische LGD)',    ROUND(s6 / 1e3, 0), NULL FROM w
 UNION ALL SELECT '7 Verlust gesamt = 5 + 6',                                  ROUND((s5 + s6) / 1e3, 0), NULL FROM w
 UNION ALL SELECT 'Info: Verlustschätzung Ausfälle mit nominaler LGD',         ROUND(s6_nominal / 1e3, 0), NULL FROM w;

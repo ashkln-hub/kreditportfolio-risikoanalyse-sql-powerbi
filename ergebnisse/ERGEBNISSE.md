@@ -260,16 +260,16 @@ Automatisch erzeugt von `src/02_sql_pipeline.py`. Alle Werte basieren auf synthe
 
 ## 07_expected_loss · expected_loss_ueberleitung
 
-| schritt                                                   |   wert_tsd_eur |   effekt_tsd_eur |
-|:----------------------------------------------------------|---------------:|-----------------:|
-| 1 Bisher: EL lebende Kredite (alte PD, nominale LGD)      |           1541 |              nan |
-| 2 Stufe 1: Rating-PD aus vertragsgemäßer Kohorte          |           1307 |             -234 |
-| 3 PD-Floor 0,05 % (Annahme)                               |           1315 |                8 |
-| 4 Verzugs-PD für Kredite im Rückstand                     |           1560 |              245 |
-| 5 Ökonomische LGD (Abzinsung 3 %, Kosten 0 %) = EL lebend |           1757 |              198 |
-| 6 Verlustschätzung Ausfälle (Stufe 3, ökonomische LGD)    |           2220 |              nan |
-| 7 Verlust gesamt = 5 + 6                                  |           3977 |              nan |
-| Info: Verlustschätzung Ausfälle mit nominaler LGD         |           1931 |              nan |
+| schritt                                                |   wert_tsd_eur |   effekt_tsd_eur |
+|:-------------------------------------------------------|---------------:|-----------------:|
+| 1 Bisher: EL lebende Kredite (alte PD, nominale LGD)   |           1541 |              nan |
+| 2 Stufe 1: Rating-PD aus vertragsgemäßer Kohorte       |           1307 |             -234 |
+| 3 PD-Floor 0,05 % (Annahme)                            |           1315 |                8 |
+| 4 Ökonomische LGD (Abzinsung 3 %, Kosten 0 %)          |           1486 |              171 |
+| 5 Verzugs-PD für Kredite im Rückstand = EL lebend      |           1757 |              271 |
+| 6 Verlustschätzung Ausfälle (Stufe 3, ökonomische LGD) |           2220 |              nan |
+| 7 Verlust gesamt = 5 + 6                               |           3977 |              nan |
+| Info: Verlustschätzung Ausfälle mit nominaler LGD      |           1931 |              nan |
 
 ## 08_marge_nach_risikokosten · stressfenster_test
 

@@ -146,12 +146,12 @@ WITH lgd_konsum AS (
 )
 SELECT pr.produkt,
        d.ratingklasse,
-       ROUND(d.pd, 6)                             AS pd_12m,
-       ROUND(d.pd_ohne_stress, 6)                 AS pd_12m_ohne_stress,
-       ROUND(l.lgd, 6)                            AS lgd,
+       ROUND(d.pd, 10)                            AS pd_12m,
+       ROUND(d.pd_ohne_stress, 10)                AS pd_12m_ohne_stress,
+       ROUND(l.lgd, 10)                           AS lgd,
        (SELECT wert FROM annahme WHERE parameter = 'refinanzierung_pa') AS refinanzierung,
-       ROUND(d.pd * l.lgd, 6)                     AS risikokosten,
-       ROUND(d.pd_ohne_stress * l.lgd, 6)         AS risikokosten_ohne_stress
+       ROUND(d.pd * l.lgd, 10)                    AS risikokosten,
+       ROUND(d.pd_ohne_stress * l.lgd, 10)        AS risikokosten_ohne_stress
 FROM v_pd_rating d
 CROSS JOIN lgd_konsum l
 CROSS JOIN (SELECT 'Ratenkredit' AS produkt UNION ALL SELECT 'Autokredit') pr
