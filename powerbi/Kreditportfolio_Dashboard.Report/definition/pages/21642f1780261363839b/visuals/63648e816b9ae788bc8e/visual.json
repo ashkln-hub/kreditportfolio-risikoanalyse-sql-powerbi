@@ -1,0 +1,79 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "63648e816b9ae788bc8e",
+  "position": {
+    "x": 20,
+    "y": 718,
+    "z": 14000,
+    "height": 110,
+    "width": 1240,
+    "tabOrder": 14000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Einordnung: Die NPL-Quote sinkt seit 07/2024, das NPL-Volumen steigt aber weiter",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "12pt",
+                      "color": "#13294B"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Nennereffekt: Der Bestand wuchs von 474 auf 715 Mio. €, das NPL-Volumen von 6,75 auf 7,28 Mio. €. Bei konstantem Bestand von 07/2024 läge die Quote heute bei 1,54 % statt 1,02 %.",
+                    "textStyle": {
+                      "fontSize": "10pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Seasoning: Neue Kredite fallen erst nach einigen Monaten aus. Ein schnell wachsender Bestand enthält viele junge Kredite, die die Quote vorübergehend drücken.",
+                    "textStyle": {
+                      "fontSize": "10pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Abgang: Ausgefallene Kredite verlassen den Bestand nach Ende der Verwertung (Raten 18, Auto 6, Bau 24 Monate). In den letzten 12 Monaten gingen 6,1 Mio. € NPL ab.",
+                    "textStyle": {
+                      "fontSize": "10pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Wachstumsneutrale Sicht: Vintage-Kurven (Seite 3) vergleichen Jahrgänge bei gleichem Kreditalter. Alle Daten sind synthetisch.",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#4F5B6B"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

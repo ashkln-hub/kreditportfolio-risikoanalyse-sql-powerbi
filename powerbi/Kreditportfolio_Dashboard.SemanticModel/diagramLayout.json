@@ -124,6 +124,19 @@
             "width": 234
           },
           "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1588.5615615668055,
+            "y": 360.99349500412961
+          },
+          "nodeIndex": "fact_risikokosten",
+          "nodeLineageTag": "a4d6ef73-7d1e-4c31-961e-1227663e4334",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
         }
       ],
       "name": "Alle Tabellen",

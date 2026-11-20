@@ -9,9 +9,9 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["Datenordner","dim_datum","dim_produkt","dim_region","dim_rating","fact_bestand_monat","fact_neugeschaeft","fact_vintage","fact_expected_loss","_Measures"]
+annotation PBI_QueryOrder = ["Datenordner","dim_datum","dim_produkt","dim_region","dim_rating","fact_bestand_monat","fact_neugeschaeft","fact_vintage","fact_expected_loss","fact_risikokosten","_Measures"]
 
-annotation PBI_ProTooling = ["DevMode"]
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling"]
 
 ref table _Measures
 ref table dim_datum
@@ -22,6 +22,7 @@ ref table fact_bestand_monat
 ref table fact_neugeschaeft
 ref table fact_vintage
 ref table fact_expected_loss
+ref table fact_risikokosten
 
 ref cultureInfo de-DE
 

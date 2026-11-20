@@ -41,7 +41,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "• Ursache im Modell: Kredite aus der Phase von Zinswende und hoher Inflation (07/2022 – 12/2023) haben ein höheres Ausfallrisiko.",
+                    "value": "• Die Analyse findet den im Generator eingebauten Stressaufschlag (×1,25 für Auszahlungen 07/2022–12/2023) korrekt wieder. Die Daten sind synthetisch, das ist kein Befund über reale Zinsen oder Inflation.",
                     "textStyle": {
                       "fontSize": "10pt"
                     }

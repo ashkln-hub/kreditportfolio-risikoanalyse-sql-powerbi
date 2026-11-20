@@ -31,7 +31,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "EL = PD × LGD × EAD zum 30.09.2026 · Risikoadjustierte Marge = Zins − 3,0 % Refinanzierung − Risikokosten",
+                    "value": "Stichtag 30.09.2026 · EL = PD × LGD × EAD (ökonomische LGD) · Stufen in Anlehnung an IFRS 9, kein vollständiges IFRS-9-Modell",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#4F5B6B"

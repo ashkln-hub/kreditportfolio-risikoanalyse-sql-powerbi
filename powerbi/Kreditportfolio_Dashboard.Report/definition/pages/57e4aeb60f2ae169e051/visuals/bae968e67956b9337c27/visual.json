@@ -3,7 +3,7 @@
   "name": "bae968e67956b9337c27",
   "position": {
     "x": 788,
-    "y": 182,
+    "y": 288,
     "z": 11000,
     "height": 262,
     "width": 472,
@@ -43,12 +43,27 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Risikoadjustierte Marge"
+                  "Property": "Marge nach Risikokosten"
                 }
               },
-              "queryRef": "_Measures.Risikoadjustierte Marge",
-              "nativeQueryRef": "Risikoadjustierte Marge",
-              "displayName": "Risikoadj. Marge"
+              "queryRef": "_Measures.Marge nach Risikokosten",
+              "nativeQueryRef": "Marge nach Risikokosten",
+              "displayName": "Marge nach Risikokosten"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Marge nach Risikokosten ohne Stressfenster"
+                }
+              },
+              "queryRef": "_Measures.Marge nach Risikokosten ohne Stressfenster",
+              "nativeQueryRef": "Marge nach Risikokosten ohne Stressfenster",
+              "displayName": "ohne Stressfenster 07/22–12/23"
             }
           ]
         }
@@ -114,7 +129,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Risikoadjustierte Marge Konsumentenkredite (Neugeschäft ab 2024)'"
+                  "Value": "'Marge nach Risikokosten Konsumentenkredite (Neugeschäft ab 2024)'"
                 }
               }
             },

@@ -105,12 +105,14 @@ table _Measures
 		displayFolder: Neugeschäft
 		lineageTag: b8503780-bed4-5537-97d6-529e4717d675
 
-	measure EAD = SUM ( fact_expected_loss[ead] )
+	/// EAD der lebenden Kredite (Stufe 1 + 2)
+	measure EAD = CALCULATE ( SUM ( fact_expected_loss[ead] ), fact_expected_loss[stufe] < 3 )
 		formatString: #,0 €
 		displayFolder: Expected Loss
 		lineageTag: 18064db8-cf0c-5e39-9e01-d3cb4c416a70
 
-	measure 'Expected Loss' = SUM ( fact_expected_loss[expected_loss] )
+	/// 12-Monats-EL der lebenden Kredite (Stufe 1 + 2), ökonomische LGD
+	measure 'Expected Loss' = CALCULATE ( SUM ( fact_expected_loss[expected_loss] ), fact_expected_loss[stufe] < 3 )
 		formatString: #,0 €
 		displayFolder: Expected Loss
 		lineageTag: 307885f5-ed2d-511e-b2a4-f24856727e80
@@ -120,24 +122,33 @@ table _Measures
 		displayFolder: Expected Loss
 		lineageTag: 23d1b8cf-3379-51b2-aa49-d824568caccb
 
-	measure 'PD gewichtet' = DIVIDE ( SUMX ( fact_expected_loss, fact_expected_loss[ead] * fact_expected_loss[pd_12m] ), [EAD] )
+	measure 'PD gewichtet' = DIVIDE ( SUMX ( FILTER ( fact_expected_loss, fact_expected_loss[stufe] < 3 ), fact_expected_loss[ead] * fact_expected_loss[pd_12m] ), [EAD] )
 		formatString: 0.00%
 		displayFolder: Expected Loss
 		lineageTag: 8de12562-b1a5-586b-b674-565edc43d7c9
 
-	measure 'LGD gewichtet' = DIVIDE ( [Expected Loss], SUMX ( fact_expected_loss, fact_expected_loss[ead] * fact_expected_loss[pd_12m] ) )
+	measure 'LGD gewichtet' = DIVIDE ( [Expected Loss], SUMX ( FILTER ( fact_expected_loss, fact_expected_loss[stufe] < 3 ), fact_expected_loss[ead] * fact_expected_loss[pd_12m] ) )
 		formatString: 0.0%
 		displayFolder: Expected Loss
 		lineageTag: 11d85035-7524-5858-b42a-2e9c7f5e8678
 
-	measure Risikokosten = [PD gewichtet] * [LGD gewichtet]
+	/// PD × ökonomische LGD je Ratingklasse (fact_risikokosten, identisch mit sql/08), über Ratingklassen mit dem Neugeschäftsvolumen gewichtet
+	measure Risikokosten =
+			VAR _volumen = [Neugeschäft Volumen]
+			RETURN
+			    DIVIDE (
+			        SUMX ( VALUES ( dim_rating[ratingklasse] ), [Neugeschäft Volumen] * CALCULATE ( MAX ( fact_risikokosten[risikokosten] ) ) ),
+			        _volumen
+			    )
 		formatString: 0.00%
 		displayFolder: Pricing
 		lineageTag: 480b49a2-8618-573b-bbd9-4123e436148f
 
-	measure 'Risikoadjustierte Marge' =
-			// Sollzins Neugeschäft − Refinanzierung (Annahme 3,0 %) − Risikokosten (PD × LGD)
-			[Neugeschäft Zins] - 3 / 100 - [Risikokosten]
+	/// Zins − Refinanzierung − Risikokosten. Betriebs- und Eigenkapitalkosten sind nicht enthalten.
+	measure 'Marge nach Risikokosten' =
+			// Sollzins Neugeschäft − Refinanzierung (Annahme, sql/00_annahme.sql) − Risikokosten (PD × LGD)
+			// ohne Betriebs- und Eigenkapitalkosten
+			IF ( ISBLANK ( [Risikokosten] ), BLANK (), [Neugeschäft Zins] - [Refinanzierung] - [Risikokosten] )
 		formatString: 0.00%
 		displayFolder: Pricing
 		lineageTag: 52e89067-b6a2-5d09-8765-f00763048e08
@@ -150,6 +161,76 @@ table _Measures
 		formatString: 0.00%
 		displayFolder: Vintage
 		lineageTag: ef2def92-4a28-57e8-b9a0-1897fa90100a
+
+	/// Beobachtete Rating-PD ohne Floor und ohne Verzugs-PD (zum Vergleich)
+	measure 'PD gewichtet (roh)' = DIVIDE ( SUMX ( FILTER ( fact_expected_loss, fact_expected_loss[stufe] < 3 ), fact_expected_loss[ead] * fact_expected_loss[pd_rating_roh] ), [EAD] )
+		formatString: 0.00%
+		displayFolder: Expected Loss
+		lineageTag: f648424a-0237-4c00-8cee-edbea3a23eb3
+
+	/// 12-Monats-EL der lebenden Kredite mit nominaler statt ökonomischer LGD (zum Vergleich)
+	measure 'EL nominale LGD' = SUMX ( FILTER ( fact_expected_loss, fact_expected_loss[stufe] < 3 ), fact_expected_loss[ead] * fact_expected_loss[pd_12m] * fact_expected_loss[lgd_nominal] )
+		formatString: #,0 €
+		displayFolder: Expected Loss
+		lineageTag: 5f19045b-8e66-4f72-aae7-303e6d695aa4
+
+	measure 'LGD nominal gewichtet' = DIVIDE ( [EL nominale LGD], SUMX ( FILTER ( fact_expected_loss, fact_expected_loss[stufe] < 3 ), fact_expected_loss[ead] * fact_expected_loss[pd_12m] ) )
+		formatString: 0.0%
+		displayFolder: Expected Loss
+		lineageTag: db0b09b7-4724-4650-a848-c94ae734f895
+
+	/// Mehr-EL, weil Kredite im Rückstand die Verzugs-PD statt der Rating-PD erhalten
+	measure 'Effekt Verzugs-PD' = SUMX ( FILTER ( fact_expected_loss, fact_expected_loss[stufe] = 2 ), fact_expected_loss[ead] * ( fact_expected_loss[pd_12m] - fact_expected_loss[pd_rating] ) * fact_expected_loss[lgd] )
+		formatString: #,0 €
+		displayFolder: Expected Loss
+		lineageTag: f1d27aae-3dbe-4dfa-8ef8-38c06e9e2d18
+
+	/// Restschuld der ausgefallenen Kredite (Stufe 3) zum Stichtag
+	measure 'EAD Ausfall' = CALCULATE ( SUM ( fact_expected_loss[ead] ), fact_expected_loss[stufe] = 3 )
+		formatString: #,0 €
+		displayFolder: Expected Loss
+		lineageTag: 02f548a0-a3c7-41e0-9e36-b42c1baa8baa
+
+	/// Verlustschätzung für ausgefallene Kredite = Restschuld × ökonomische LGD
+	measure 'Verlust Ausfall' = CALCULATE ( SUM ( fact_expected_loss[expected_loss] ), fact_expected_loss[stufe] = 3 )
+		formatString: #,0 €
+		displayFolder: Expected Loss
+		lineageTag: 9f2f6e6f-7af7-4c9a-bba2-a920b66b9850
+
+	measure 'Verlust gesamt' = [Expected Loss] + [Verlust Ausfall]
+		formatString: #,0 €
+		displayFolder: Expected Loss
+		lineageTag: 2940e68a-db92-43fd-a5a8-2508de6ffe0d
+
+	/// Entspricht dem Bestand zum Stichtag
+	measure 'EAD gesamt' = [EAD] + [EAD Ausfall]
+		formatString: #,0 €
+		displayFolder: Expected Loss
+		lineageTag: 0245a997-763f-4ebe-a6f6-aa021f7ea8ce
+
+	/// Annahme aus sql/00_annahme.sql
+	measure Refinanzierung = MAX ( fact_risikokosten[refinanzierung] )
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: 91391738-4250-4a19-a9f0-79458259f2d4
+
+	/// Wie Risikokosten, Pricing-PD ohne Kredite mit Auszahlung im Stressfenster 07/2022–12/2023
+	measure 'Risikokosten ohne Stressfenster' =
+			VAR _volumen = [Neugeschäft Volumen]
+			RETURN
+			    DIVIDE (
+			        SUMX ( VALUES ( dim_rating[ratingklasse] ), [Neugeschäft Volumen] * CALCULATE ( MAX ( fact_risikokosten[risikokosten_ohne_stress] ) ) ),
+			        _volumen
+			    )
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: a4e81223-61f7-4938-a15a-9deaa1d59061
+
+	/// Variante der Marge nach Risikokosten mit Pricing-PD ohne Stressfenster
+	measure 'Marge nach Risikokosten ohne Stressfenster' = IF ( ISBLANK ( [Risikokosten ohne Stressfenster] ), BLANK (), [Neugeschäft Zins] - [Refinanzierung] - [Risikokosten ohne Stressfenster] )
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: ab5e63bf-073f-4fa1-91cc-db8d00da5382
 
 	column Spalte1
 		dataType: string
