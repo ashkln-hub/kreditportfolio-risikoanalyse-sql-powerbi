@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "d0040351f8f9c19abae7",
+  "position": {
+    "x": 20,
+    "y": 824,
+    "z": 16000,
+    "height": 70,
+    "width": 1240,
+    "tabOrder": 16000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Marge nach Risikokosten = Zins − Refinanzierung 3,0 % (Annahme) − PD × LGD. Betriebs- und Eigenkapitalkosten sind nicht enthalten. Klasse 9 wird ohne Stressfenster knapp positiv, Klasse 10 bleibt negativ (nur 41 Kredite).",
+                    "textStyle": {
+                      "fontSize": "10pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Stufe 3 = Restschuld × ökonomische LGD. Stufe 2 erhält die 12-Monats-PD je Verzugsstufe, keine Lifetime-PD. Annahmen: sql/00_annahme.sql. Synthetische Daten.",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#4F5B6B"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

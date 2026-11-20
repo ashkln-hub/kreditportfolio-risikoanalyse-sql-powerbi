@@ -3,7 +3,7 @@
   "name": "c1236d76318b3cb8d90d",
   "position": {
     "x": 788,
-    "y": 452,
+    "y": 558,
     "z": 12000,
     "height": 258,
     "width": 472,
@@ -115,7 +115,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Expected Loss nach Produkt (Tsd. €)'"
+                  "Value": "'Expected Loss lebender Kredite nach Produkt (Tsd. €)'"
                 }
               }
             },

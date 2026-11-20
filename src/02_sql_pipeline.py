@@ -3,8 +3,9 @@ Schritt 2 – SQL-Pipeline
 
 1. Legt die SQLite-Datenbank data/kreditportfolio.db nach sql/01_schema.sql an
 2. Lädt die CSV-Rohdaten aus data/raw/
-3. Führt die Analysen sql/02 … 08 aus und speichert jedes Ergebnis als CSV in ergebnisse/
-   sowie eine Übersicht in ergebnisse/ERGEBNISSE.md
+3. Legt die Annahmen an (sql/00_annahme.sql) und führt die Analysen sql/02 … 08 aus.
+   Jedes Ergebnis wird als CSV in ergebnisse/ gespeichert, dazu eine Übersicht in ergebnisse/ERGEBNISSE.md.
+   SQL vor dem ersten Marker "-- @ergebnis:" (z. B. CREATE TABLE/VIEW) wird zuerst ausgeführt.
 4. Baut das Power-BI-Datenmodell (sql/09) und exportiert es nach powerbi/daten/
 """
 
@@ -44,10 +45,11 @@ def lade_rohdaten(con: sqlite3.Connection) -> None:
 
 def fuehre_analysen_aus(con: sqlite3.Connection) -> list[tuple[str, str, pd.DataFrame]]:
     ergebnisse = []
-    for datei in sorted(SQL.glob("0[2-8]_*.sql")):
+    for datei in sorted(SQL.glob("0[02-8]_*.sql")):     # 00 Annahme, 02–08 Analysen (01 = Schema)
         text = datei.read_text(encoding="utf-8")
         teile = MARKER.split(text)
-        # teile = [Kopf, name1, sql1, name2, sql2, …]
+        # teile = [Kopf, name1, sql1, name2, sql2, …]; der Kopf legt Tabellen und Sichten an
+        con.executescript(teile[0])
         for name, abfrage in zip(teile[1::2], teile[2::2]):
             df = pd.read_sql_query(abfrage.strip().rstrip(";"), con)
             ziel = ERG / f"{datei.stem}__{name}.csv"

@@ -50,3 +50,11 @@ relationship 131d1389-f757-551a-9749-06bd524dec3b
 	fromColumn: fact_expected_loss.ratingklasse
 	toColumn: dim_rating.ratingklasse
 
+relationship fact_risikokosten_produkt_dim_produkt_produkt
+	fromColumn: fact_risikokosten.produkt
+	toColumn: dim_produkt.produkt
+
+relationship fact_risikokosten_ratingklasse_dim_rating_ratingklasse
+	fromColumn: fact_risikokosten.ratingklasse
+	toColumn: dim_rating.ratingklasse
+

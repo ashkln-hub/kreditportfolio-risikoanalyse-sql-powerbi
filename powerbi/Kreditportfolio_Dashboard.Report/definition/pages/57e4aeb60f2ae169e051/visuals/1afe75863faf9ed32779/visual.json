@@ -3,7 +3,7 @@
   "name": "1afe75863faf9ed32779",
   "position": {
     "x": 20,
-    "y": 182,
+    "y": 288,
     "z": 10000,
     "height": 528,
     "width": 760,
@@ -65,6 +65,21 @@
               "queryRef": "_Measures.EAD",
               "nativeQueryRef": "EAD",
               "displayName": "EAD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "PD gewichtet (roh)"
+                }
+              },
+              "queryRef": "_Measures.PD gewichtet (roh)",
+              "nativeQueryRef": "PD gewichtet (roh)",
+              "displayName": "PD roh"
             },
             {
               "field": {
@@ -144,7 +159,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Expected Loss nach Produkt und Risikoband'"
+                  "Value": "'Expected Loss lebender Kredite nach Produkt und Risikoband'"
                 }
               }
             },

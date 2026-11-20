@@ -28,7 +28,7 @@
               },
               "queryRef": "_Measures.PD gewichtet",
               "nativeQueryRef": "PD gewichtet",
-              "displayName": "PD (12 Monate, gewichtet)"
+              "displayName": "PD gewichtet (inkl. Verzugs-PD)"
             }
           ]
         }

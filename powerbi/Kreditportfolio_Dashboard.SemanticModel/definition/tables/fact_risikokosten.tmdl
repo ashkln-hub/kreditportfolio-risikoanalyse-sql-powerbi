@@ -1,0 +1,77 @@
+/// Risikokosten je Produkt und Ratingklasse für die Marge nach Risikokosten (identisch mit sql/08). Nur Raten- und Autokredite.
+table fact_risikokosten
+	lineageTag: a4d6ef73-7d1e-4c31-961e-1227663e4334
+
+	column produkt
+		dataType: string
+		isHidden
+		lineageTag: 88a4564e-53c7-4772-ad4c-7d356e6f485a
+		summarizeBy: none
+		sourceColumn: produkt
+
+	column ratingklasse
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7fa28327-b7ac-498d-89c5-56cbb90e6cce
+		summarizeBy: none
+		sourceColumn: ratingklasse
+
+	column pd_12m
+		dataType: double
+		isHidden
+		formatString: 0.00%
+		lineageTag: 1592cf30-a130-4f9a-999f-5b3167a82091
+		summarizeBy: none
+		sourceColumn: pd_12m
+
+	column pd_12m_ohne_stress
+		dataType: double
+		isHidden
+		formatString: 0.00%
+		lineageTag: 56aca864-6e26-468d-82ae-42acf7106e4c
+		summarizeBy: none
+		sourceColumn: pd_12m_ohne_stress
+
+	column lgd
+		dataType: double
+		isHidden
+		formatString: 0.0%
+		lineageTag: a23d6374-2799-4adc-b364-d2e6257a0476
+		summarizeBy: none
+		sourceColumn: lgd
+
+	column refinanzierung
+		dataType: double
+		isHidden
+		formatString: 0.00%
+		lineageTag: 05461d9c-64a2-4c3c-9bc4-ca0a525f3501
+		summarizeBy: none
+		sourceColumn: refinanzierung
+
+	column risikokosten
+		dataType: double
+		isHidden
+		formatString: 0.00%
+		lineageTag: 440a42bb-a1d0-4b5c-a24d-319b43be02df
+		summarizeBy: none
+		sourceColumn: risikokosten
+
+	column risikokosten_ohne_stress
+		dataType: double
+		isHidden
+		formatString: 0.00%
+		lineageTag: 2eb57fa2-cfc6-4a11-bc4d-58c32f94bdc8
+		summarizeBy: none
+		sourceColumn: risikokosten_ohne_stress
+
+	partition fact_risikokosten = m
+		mode: import
+		source =
+				let
+				    Quelle = Csv.Document(File.Contents(Datenordner & "fact_risikokosten.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Kopfzeilen = Table.PromoteHeaders(Quelle, [PromoteAllScalars = true]),
+				    Typen = Table.TransformColumnTypes(Kopfzeilen, {{"produkt", type text}, {"ratingklasse", Int64.Type}, {"pd_12m", type number}, {"pd_12m_ohne_stress", type number}, {"lgd", type number}, {"refinanzierung", type number}, {"risikokosten", type number}, {"risikokosten_ohne_stress", type number}}, "en-US")
+				in
+				    Typen
+

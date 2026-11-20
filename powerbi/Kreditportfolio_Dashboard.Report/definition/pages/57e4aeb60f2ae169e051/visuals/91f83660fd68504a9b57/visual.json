@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "91f83660fd68504a9b57",
+  "position": {
+    "x": 1016,
+    "y": 182,
+    "z": 15400,
+    "height": 96,
+    "width": 241,
+    "tabOrder": 15400
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "LGD nominal gewichtet"
+                }
+              },
+              "queryRef": "_Measures.LGD nominal gewichtet",
+              "nativeQueryRef": "LGD nominal gewichtet",
+              "displayName": "LGD nominal (Vergleich)"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

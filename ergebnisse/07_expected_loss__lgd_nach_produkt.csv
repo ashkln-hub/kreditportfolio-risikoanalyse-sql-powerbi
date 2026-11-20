@@ -1,4 +1,4 @@
-﻿produkt;abgeschlossene_verwertungen;ead_mio_eur;lgd_prozent
-Ratenkredit;267;2,77;63,7
-Autokredit;169;3,1;38,4
-Baufinanzierung;18;5,95;14,9
+﻿produkt;abgeschlossene_verwertungen;laufende_verwertungen;ead_mio_eur;abwicklung_monate;lgd_nominal_prozent;lgd_oekonomisch_prozent
+Ratenkredit;267;170;2,77;18,0;63,7;65,3
+Autokredit;169;26;3,1;6,0;38,4;39,3
+Baufinanzierung;18;19;5,95;24,0;14,9;19,8
