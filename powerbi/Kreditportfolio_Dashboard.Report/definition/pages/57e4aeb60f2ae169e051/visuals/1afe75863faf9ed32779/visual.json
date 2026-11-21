@@ -79,7 +79,7 @@
               },
               "queryRef": "_Measures.PD gewichtet (roh)",
               "nativeQueryRef": "PD gewichtet (roh)",
-              "displayName": "PD roh"
+              "displayName": "Rating-PD vor Floor"
             },
             {
               "field": {

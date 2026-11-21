@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Einordnung: Die NPL-Quote sinkt seit 07/2024, das NPL-Volumen steigt aber weiter",
+                    "value": "Einordnung: Die NPL-Quote sinkt seit 07/2024, das NPL-Volumen ist seit 2025 seitwärts",
                     "textStyle": {
                       "fontWeight": "bold",
                       "fontSize": "12pt",
@@ -31,7 +31,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "• Nennereffekt: Der Bestand wuchs von 474 auf 715 Mio. €, das NPL-Volumen von 6,75 auf 7,28 Mio. €. Bei konstantem Bestand von 07/2024 läge die Quote heute bei 1,54 % statt 1,02 %.",
+                    "value": "• Nennereffekt: Das NPL-Volumen stieg ab 07/2024 (6,75 Mio. €) und liegt seit 2025 seitwärts bei 7 bis 8 Mio. € (09/2025: 7,69, 09/2026: 7,28 Mio. €). Der Bestand wuchs von 474 auf 715 Mio. €. Bei konstantem Bestand von 07/2024 läge die Quote heute bei 1,54 % statt 1,02 %.",
                     "textStyle": {
                       "fontSize": "10pt"
                     }
