@@ -151,7 +151,7 @@ umbenennen** (*Rename for this visual*).
 | Visual | Felder |
 |---|---|
 | **Liniendiagramm** (*Line chart*), links | X: `dim_datum[datum]` · Y: `NPL-Quote` und `Verzugsquote 30+` |
-| **Liniendiagramm** (*Line chart*), rechts, **neu** | X: `dim_datum[datum]` · Y: `NPL Volumen` (Anzeigename „NPL-Volumen“) · Titel „NPL-Volumen im Zeitverlauf (steigt weiter)“ |
+| **Liniendiagramm** (*Line chart*), rechts, **neu** | X: `dim_datum[datum]` · Y: `NPL Volumen` (Anzeigename „NPL-Volumen“) · Titel „NPL-Volumen im Zeitverlauf (seit 2025 seitwärts)“ |
 | 4 × **Karte** | `NPL-Quote Stichtag`, `NPL-Quote Vorjahr`, `NPL-Quote Veränderung VJ (pp)`, `NPL Volumen Stichtag` |
 | **Matrix** | Zeilen: `dim_produkt[produkt]` · Spalten: `fact_bestand_monat[verzugsstatus]` · Werte: `Anteil am Bestand` |
 | **Balkendiagramm** | Y: `dim_region[region]` · X: `NPL-Quote Stichtag` (absteigend sortiert) |
@@ -165,7 +165,9 @@ Text eintragen. Das bestehende linke Liniendiagramm dafür auf 760 px Breite ver
 
 Klickpfad für das Textfeld: **Einfügen → Textfeld** (*Insert → Text box*), Inhalt:
 
-> **Einordnung: Die NPL-Quote sinkt seit 07/2024, das NPL-Volumen steigt aber weiter**
+> **Einordnung: Die NPL-Quote sinkt seit 07/2024, das NPL-Volumen ist seit 2025 seitwärts bei 7 bis 8 Mio. €**
+> Das NPL-Volumen stieg ab 07/2024 und bewegt sich seit 2025 zwischen rund 7 und 8 Mio. € (09/2025: 7,69,
+> 09/2026: 7,28 Mio. €). Die Quote fällt vor allem, weil der Bestand wächst.
 > • Nennereffekt: Der Bestand wuchs von 474 auf 715 Mio. €, das NPL-Volumen von 6,75 auf 7,28 Mio. €. Bei
 > konstantem Bestand von 07/2024 läge die Quote heute bei 1,54 % statt 1,02 %.
 > • Seasoning: Neue Kredite fallen erst nach einigen Monaten aus. Ein schnell wachsender Bestand enthält viele
@@ -207,10 +209,10 @@ Für diese Seite den Datenschnitt *Produkt* durch einen Seitenfilter **Ratenkred
 |---|---|
 | 5 × **Karte**, Zeile 1 | `EAD` („EAD lebend (Stufe 1+2)“), `PD gewichtet` („PD gewichtet (inkl. Verzugs-PD)“), `LGD gewichtet` („LGD ökonomisch“), `Expected Loss` („EL lebend (12 Monate)“), `EL-Quote` |
 | 5 × **Karte**, Zeile 2, **neu** | `EAD Ausfall` („Ausfallvolumen (Stufe 3)“), `Verlust Ausfall` („Verlust Ausfälle (Stufe 3)“), `Verlust gesamt` („Verlust gesamt (Stufe 1–3)“), `Effekt Verzugs-PD` („davon Effekt Verzugs-PD“), `LGD nominal gewichtet` („LGD nominal (Vergleich)“) |
-| **Matrix** | Zeilen: `dim_produkt[produkt]`, darunter `dim_rating[risikoband]` · Werte: `EAD`, `PD gewichtet (roh)` („PD roh“, **neu**), `PD gewichtet`, `LGD gewichtet`, `Expected Loss`, `EL-Quote` |
+| **Matrix** | Zeilen: `dim_produkt[produkt]`, darunter `dim_rating[risikoband]` · Werte: `EAD`, `PD gewichtet (roh)` („Rating-PD vor Floor“, **neu**), `PD gewichtet`, `LGD gewichtet`, `Expected Loss`, `EL-Quote` |
 | **Gruppiertes Säulendiagramm** | X: `dim_rating[ratingklasse]` · Y: `Marge nach Risikokosten` und `Marge nach Risikokosten ohne Stressfenster` (**neu**) · Filter: `dim_datum[jahr]` = 2024, 2025, 2026 und `dim_produkt[produktgruppe]` = Konsumentenkredit |
 | **Gruppiertes Balkendiagramm** | Y: `dim_produkt[produkt]` · X: `Expected Loss` |
-| **Textfeld**, **neu** | Definition der Marge nach Risikokosten (ohne Betriebs- und Eigenkapitalkosten), Hinweis zu Stufe 2 und 3 |
+| **Textfeld**, **neu** | Definition der Marge nach Risikokosten (ohne Betriebs- und Eigenkapitalkosten), Hinweis, dass das Vorzeichen in Klasse 9 nicht bestimmbar ist, Hinweis zu Stufe 2 und 3 |
 
 Klickpfad für die neuen Karten: **Visualisierungen → Karte** (*Visualizations → Card*) → Measure auf **Felder**
 (*Fields*) ziehen → **Visual formatieren → Visual → Beschriftungswert → Anzeigeeinheiten: Millionen,

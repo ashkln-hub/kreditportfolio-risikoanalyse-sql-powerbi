@@ -256,7 +256,7 @@ Automatisch erzeugt von `src/02_sql_pipeline.py`. Alle Werte basieren auf synthe
 | 1       | vertragsgemäß (12-Monats-EL, Rating-PD)         |            12104 |        704.87 |                   0.66 |          31.2 |              1461 |
 | 2       | Rückstand 30/60 Tage (12-Monats-EL, Verzugs-PD) |               91 |          2.61 |                  32.58 |          34.8 |               296 |
 | 3       | Ausfall 90+ (Verlustschätzung, PD = 100 %)      |              215 |          7.28 |                 100    |          30.5 |              2220 |
-| Gesamt  | Bestand gesamt                                  |            12410 |        714.76 |                   1.79 |          31   |              3977 |
+| Gesamt  | Bestand gesamt                                  |            12410 |        714.76 |                 nan    |          31   |              3977 |
 
 ## 07_expected_loss · expected_loss_ueberleitung
 

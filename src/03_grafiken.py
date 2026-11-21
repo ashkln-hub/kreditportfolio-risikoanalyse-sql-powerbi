@@ -73,7 +73,7 @@ def npl_verlauf() -> None:
     ax3.spines["right"].set_visible(True)
     linien = ax2.get_legend_handles_labels()[0] + ax3.get_legend_handles_labels()[0]
     ax2.legend(linien, [l.get_label() for l in linien], frameon=False, loc="upper left")
-    ax2.set_title("NPL-Volumen steigt weiter, der Bestand wächst schneller (Nennereffekt)")
+    ax2.set_title("NPL-Volumen seit 2025 seitwärts (7–8 Mio. €), Bestand wächst weiter")
     ax2.set_xlim(df["stichtag"].min(), df["stichtag"].max() + pd.Timedelta(days=150))
     speichern(fig, "01_npl_quote")
 

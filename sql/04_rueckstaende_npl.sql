@@ -43,7 +43,8 @@ GROUP BY k.produkt
 ORDER BY npl_90_plus_prozent DESC;
 
 -- @ergebnis: npl_quote_zerlegung
--- Warum sinkt die Quote, obwohl das NPL-Volumen steigt? Vergleich Höchststand 07/2024 mit dem letzten Stichtag:
+-- Warum sinkt die Quote, obwohl das NPL-Volumen nicht sinkt (Anstieg ab 07/2024, seit 2025 seitwärts bei 7–8 Mio. €)?
+-- Vergleich Höchststand der Quote 07/2024 mit 09/2025 und dem letzten Stichtag:
 --   * Nennereffekt: Quote, wenn der Bestand auf dem Stand 07/2024 geblieben wäre
 --   * Seasoning: Anteil junger Kredite (< 12 Monate seit Auszahlung), die noch kaum ausfallen können
 --   * Abgang: Ausfälle bleiben nur bis zum Ende der Verwertung im Bestand (Raten 18, Auto 6, Bau 24 Monate)

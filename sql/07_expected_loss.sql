@@ -255,7 +255,7 @@ FROM v_el_basis
 GROUP BY stufe
 UNION ALL
 SELECT 'Gesamt', 'Bestand gesamt', COUNT(*), ROUND(SUM(ead) / 1e6, 2),
-       ROUND(100 * SUM(ead * pd_12m) / SUM(ead), 2),
+       NULL,   -- keine Gesamt-PD: ein Mittel über Stufe 3 (PD = 100 %) wäre keine sinnvolle PD
        ROUND(100 * SUM(ead * pd_12m * lgd) / SUM(ead * pd_12m), 1),
        ROUND(SUM(ead * pd_12m * lgd) / 1e3, 0)
 FROM v_el_basis;

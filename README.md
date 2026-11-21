@@ -28,20 +28,21 @@ Aussage über einen realen Kreditmarkt.
 | Kennzahl | Wert | Einordnung |
 |---|---|---|
 | Kreditbestand | **714,8 Mio. €** (12.410 Kredite) | 85 % Baufinanzierung, 15 % Konsumentenkredite |
-| NPL-Quote (90+ Tage Verzug) | **1,02 %** bei **7,28 Mio. €** NPL-Volumen | Die Quote fällt seit dem Höchststand von 1,43 % (07/2024), das NPL-Volumen steigt aber von 6,75 auf 7,28 Mio. €. Grund ist vor allem der wachsende Bestand (Nennereffekt), siehe [Einordnung der NPL-Quote](#einordnung-der-npl-quote) |
+| NPL-Quote (90+ Tage Verzug) | **1,02 %** bei **7,28 Mio. €** NPL-Volumen | Die Quote fällt seit dem Höchststand von 1,43 % (07/2024). Das NPL-Volumen stieg von 6,75 Mio. € (07/2024) bis 2025 und bewegt sich seitdem seitwärts zwischen 7 und 8 Mio. € (09/2025: 7,69, 09/2026: 7,28 Mio. €). Die Quote fällt vor allem, weil der Bestand wächst (Nennereffekt), siehe [Einordnung der NPL-Quote](#einordnung-der-npl-quote) |
 | Expected Loss lebender Kredite (12 Monate) | **1,76 Mio. €**, EL-Quote **0,25 %** | Ratenkredite 1,25 %, Autokredite 0,72 %, Baufinanzierung 0,12 %. Mit Verzugs-PD für Kredite im Rückstand und ökonomischer LGD |
 | Verlustschätzung Ausfälle (Stufe 3) | **2,22 Mio. €** auf 7,28 Mio. € Restschuld | Restschuld × ökonomische LGD. Mit nominaler LGD wären es 1,93 Mio. € |
 | Verlust gesamt | **3,98 Mio. €** | 1,76 Mio. € lebend + 2,22 Mio. € ausgefallen. Der bisher ausgewiesene EL von 1,54 Mio. € enthielt die Ausfälle nicht |
 | LGD (abgeschlossene Verwertungen) | nominal Raten **64 %**, Auto **38 %**, Bau **15 %** · ökonomisch **65 %**, **39 %**, **20 %** | Ökonomisch = Erlöse über die Abwicklungsdauer mit 3 % abgezinst. Die Werte treffen die im Generator vorgegebenen Mittelwerte 65/40/15 % |
 | PD bei Zahlungsrückstand | 30 Tage **29,1 %**, 60 Tage **43,3 %** (12 Monate) | Direkt aus Kohorten geschätzt. Verkettete monatliche Roll Rates liefern nur Untergrenzen (25,7 % bzw. 40,6 %) |
 | Vintage 2023 | **4,08 %** kumulierte Ausfälle nach 24 Monaten | vs. 3,08 % beim Jahrgang 2021. Die Analyse findet den im Generator eingebauten Stressaufschlag (×1,25 für Auszahlungen 07/2022–12/2023) korrekt wieder. |
-| Marge nach Risikokosten | Klasse **9: −0,19 pp**, Klasse **10: −4,56 pp** | Ohne Stressfenster in der Pricing-PD wird Klasse 9 knapp positiv (+0,08 pp), Klasse 10 bleibt negativ (−5,12 pp). Ohne Betriebs- und Eigenkapitalkosten. Kleine Fallzahl (117 bzw. 41 Kredite im Neugeschäft ab 2024) |
+| Marge nach Risikokosten | Klasse 9: −0,19 pp, Klasse **10: −4,56 pp** | Klasse 9 liegt nahe null, das Vorzeichen ist statistisch nicht bestimmbar (36 Ausfälle bei 337 Beobachtungen, Standardfehler der Risikokosten ≈ 0,9 pp). Ohne Stressfenster +0,08 pp. Klasse 10 bleibt klar negativ. Ohne Betriebs- und Eigenkapitalkosten. Kleine Fallzahl (117 bzw. 41 Kredite im Neugeschäft ab 2024) |
 
 **Empfehlungen** (im Rahmen des synthetischen Szenarios)
 
 - **Pricing nachschärfen:** Risikoaufschlag für Ratingklasse 10 deutlich erhöhen oder diese Klasse im
-  Konsumentenkredit nur noch mit Sicherheiten vergeben. Klasse 9 deckt die Risikokosten nur knapp und nur dann,
-  wenn die Stressjahrgänge nicht in die PD eingehen. Betriebs- und Kapitalkosten sind dabei noch nicht gedeckt.
+  Konsumentenkredit nur noch mit Sicherheiten vergeben. In Klasse 9 liegt die Marge nach Risikokosten nahe null,
+  ob sie positiv oder negativ ist, lässt sich mit 36 Ausfällen nicht sagen. Betriebs- und Kapitalkosten sind
+  dabei noch nicht gedeckt, die Klasse ist also in keinem Fall auskömmlich bepreist.
 - **Jahrgänge 07/2022 bis 12/2023 eng überwachen:** Ihre Ausfallkurven liegen über denen älterer Jahrgänge.
   Frühwarnsignale (30-Tage-Rückstand) in diesem Segment priorisieren.
 - **Frühwarnung lohnt sich:** Von den Krediten mit 30 Tagen Rückstand werden 35 % im Folgemonat wieder
@@ -208,7 +209,9 @@ bekommt die Werte über die exportierten Faktentabellen. Ein geänderter Wert wi
 **Einordnung der NPL-Quote**<a id="einordnung-der-npl-quote"></a>
 
 Die NPL-Quote ist ein Bruch: NPL-Volumen geteilt durch Bestand. Sie fällt von 1,43 % (07/2024) auf
-1,02 % (09/2026), obwohl das NPL-Volumen von 6,75 auf 7,28 Mio. € steigt. Drei Gründe:
+1,02 % (09/2026). Das NPL-Volumen stieg von 6,75 Mio. € (07/2024) bis Anfang 2025 und bewegt sich seitdem
+seitwärts zwischen rund 7 und 8 Mio. € (09/2025: 7,69 Mio. €, 09/2026: 7,28 Mio. €). Die Quote fällt also vor
+allem, weil der Bestand wächst. Drei Gründe:
 
 1. **Nennereffekt:** Der Bestand wächst von 474 auf 715 Mio. €. Bei konstantem Bestand von 07/2024 läge die
    Quote heute bei 1,54 %.
@@ -269,8 +272,23 @@ Kreditrisikos. Rückstand ist hier nur ein Indikator für Stufe 2.
 - Marge nach Risikokosten = Sollzins − Refinanzierung (3,0 %, Annahme) − PD × ökonomische LGD.
   Betriebs- und Eigenkapitalkosten sind nicht enthalten.
 - Kredite aus dem Stressfenster haben in den Kohorten eine höhere 12-Monats-PD (Konsum 2,27 % gegenüber 1,61 %).
-  Darum gibt es eine Variante der Pricing-PD ohne diese Kredite. Klasse 9 wechselt damit das Vorzeichen
-  (−0,19 → +0,08 pp), Klasse 10 bleibt negativ.
+  Darum gibt es eine Variante der Pricing-PD ohne diese Kredite.
+- Warum ist der beobachtete Faktor größer als 1,25 (Konsum 2,27 % / 1,61 % ≈ 1,4, Bau 1,14 % / 0,43 % ≈ 2,6)?
+  Mit der Formel des Generators (`src/01`, Zeilen 107 bis 115 und 188 bis 196) nachgerechnet, erwartet man für
+  Konsum etwa 1,31 = 1,25 × 1,05. Die 1,05 kommen aus der Zusammensetzung der Kohorten: Kredite aus dem Fenster
+  werden 2023 bis 2025 genau in den Monaten 6 bis 30 nach Auszahlung beobachtet, in denen der Generator die
+  Ausfallrate um den Faktor 1,3 erhöht (Seasoning), dazu kleine Unterschiede im Rating- und Kundenmix. Die
+  restliche Abweichung (1,41 statt 1,31) liegt innerhalb eines Standardfehlers (rund ±9 %). Bei der
+  Baufinanzierung erwartet man etwa 1,41, beobachtet sind 14 gegenüber 16 Ausfällen. Der Faktor 2,6 ist daher
+  vor allem Zufall.
+- Höhere Zinsen 2022/23 erhöhen die PD im Generator nicht über die Kapitaldienstquote: Die Kreditrichtlinie
+  (`src/01`, Zeilen 177 bis 183) kürzt den Betrag, sobald die Rate über 35 % bzw. 45 % des Einkommens steigt.
+  Der mittlere Zuschlagsfaktor für hohe Kapitaldienstquote ist im Fenster praktisch gleich (Konsum 1,11 gegenüber
+  1,12, Bau 1,30 gegenüber 1,28).
+- Klasse 9 liegt in beiden Varianten nahe null (−0,19 bzw. +0,08 pp). Der Standardfehler der Risikokosten beträgt
+  bei 36 Ausfällen in 337 Beobachtungen rund 0,9 pp, das Vorzeichen ist also statistisch nicht bestimmbar.
+  Klasse 10 bleibt negativ. Dass ihre PD ohne Stresskredite sogar steigt (20,24 % → 21,31 %, 13 Ausfälle bei 61
+  Beobachtungen), ist Rauschen.
 - Die Analyse findet den im Generator eingebauten Stressaufschlag (×1,25 für Auszahlungen 07/2022–12/2023) korrekt wieder.
   Das ist eine Plausibilitätsprüfung der Methode und keine Aussage über reale Zinsen oder Inflation.
 

@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Marge nach Risikokosten = Zins − Refinanzierung 3,0 % (Annahme) − PD × LGD. Betriebs- und Eigenkapitalkosten sind nicht enthalten. Klasse 9 wird ohne Stressfenster knapp positiv, Klasse 10 bleibt negativ (nur 41 Kredite).",
+                    "value": "Marge nach Risikokosten = Zins − Refinanzierung 3,0 % (Annahme) − PD × LGD, ohne Betriebs- und Eigenkapitalkosten. Klasse 9 liegt nahe null, das Vorzeichen ist statistisch nicht bestimmbar (36 Ausfälle bei 337 Beobachtungen, Standardfehler der Risikokosten ≈ 0,9 pp). Klasse 10 bleibt negativ.",
                     "textStyle": {
                       "fontSize": "10pt"
                     }

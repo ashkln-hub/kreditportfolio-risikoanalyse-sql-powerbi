@@ -61,8 +61,9 @@ Tabelle `annahme` in `sql/00_annahme.sql` (siehe README, Abschnitt *Annahme*).
   (`npl_quote_zerlegung`: Quote bei konstantem Bestand, Anteil junger Kredite, Abgang aus NPL). Grafik 01 zeigt
   NPL-Volumen und Bestand unter der Quote. In Power BI gibt es auf *Risikoentwicklung* eine NPL-Volumen-Linie
   und ein Textfeld mit der Einordnung. „Rückläufig“-Formulierungen wurden ersetzt.
-- **Warum:** Die Quote fiel von 1,43 % auf 1,02 %, das NPL-Volumen stieg aber von 6,75 auf 7,28 Mio. €. Ohne
-  Volumen sieht das nach Verbesserung aus, obwohl vor allem der Bestand (Nenner) wächst.
+- **Warum:** Die Quote fiel von 1,43 % auf 1,02 %. Das NPL-Volumen stieg ab 07/2024 (6,75 Mio. €) bis 2025 und
+  bewegt sich seitdem seitwärts zwischen rund 7 und 8 Mio. € (09/2025: 7,69, 09/2026: 7,28 Mio. €). Ohne Volumen
+  sieht der Rückgang der Quote nach Verbesserung aus, er kommt aber vor allem vom wachsenden Bestand (Nenner).
 - **Dateien:** `sql/04_rueckstaende_npl.sql`, `src/03_grafiken.py`, Power-BI-Seite *Risikoentwicklung*, README
 
 ### Fix 2 – Verlustschätzung für ausgefallene Kredite (Stufe 3)
@@ -96,7 +97,7 @@ Tabelle `annahme` in `sql/00_annahme.sql` (siehe README, Abschnitt *Annahme*).
 
 - **Was:** PD-Untergrenze 0,05 % (Annahme, angelehnt an den Retail-Floor nach Basel III final). Ausgewiesen werden
   rohe PD und PD nach Floor. Der Floor greift nur bei Baufinanzierung Klasse 1 und 2. Grafik 03 zeigt die rohe PD
-  und markiert den Floor. In Power BI zeigt die Matrix „PD roh“ neben „PD“.
+  und markiert den Floor. In Power BI zeigt die Matrix „Rating-PD vor Floor“ neben „PD“.
 - **Dokumentiert:** Konsum Klasse 1 (0,22 %) > Klasse 2 (0,09 %) ist Rauschen (3 gegenüber 2 Ausfällen). Die
   Baufinanzierung endet bei Klasse 7 wegen der Kreditrichtlinie.
 - **Warum:** Eine PD von 0 % heißt „kann nicht ausfallen“, das ist bei kleinen Stichproben falsch. Glätten würde
@@ -119,8 +120,22 @@ Tabelle `annahme` in `sql/00_annahme.sql` (siehe README, Abschnitt *Annahme*).
 - **Test vorab:** Kredite aus dem Stressfenster haben eine höhere 12-Monats-PD (Konsum 2,27 % gegenüber 1,61 %,
   Bau 1,14 % gegenüber 0,43 %). Der Jahrgang 2024 liegt nach 12 Monaten mit 1,71 % über 2021 (1,14 %) und
   2022 (1,35 %), aber unter 2023 (2,04 %).
+- **Warum der beobachtete Faktor nicht 1,25 ist** (Konsum ≈ 1,4, Bau ≈ 2,6): Mit der Formel des Generators
+  nachgerechnet (Basis-PD × Produkt-, Beschäftigungs-, Regions- und Kapitaldienstfaktor × 1,25 im Fenster, dazu
+  der Seasoning-Faktor je Monat seit Auszahlung über die 12 Folgemonate jeder Kohortenbeobachtung) erwartet man
+  für Konsum 1,31 = 1,25 × 1,05. Die 1,05 entstehen, weil Kredite aus dem Fenster in den Kohorten 2023 bis 2025
+  genau in den Monaten 6 bis 30 nach Auszahlung beobachtet werden, in denen der Generator die Ausfallrate um
+  1,3 erhöht, dazu kleine Mix-Unterschiede. Die restliche Abweichung (1,41 statt 1,31) liegt innerhalb eines
+  Standardfehlers (≈ ±9 %). Für Bau erwartet man ≈ 1,41, beobachtet sind 14 gegenüber 16 Ausfällen, der Faktor
+  2,6 ist also vor allem Zufall.
+  Geprüft und verworfen: Zuschläge für hohe Kapitaldienstquote durch höhere Zinsen 2022/23. Die Kreditrichtlinie
+  in `src/01` (Zeilen 177 bis 183) kürzt den Betrag, sobald die Rate 35 % bzw. 45 % des Einkommens übersteigt.
+  Der mittlere Zuschlagsfaktor ist im Fenster praktisch gleich (Konsum 1,11 gegenüber 1,12, Bau 1,30 gegenüber 1,28).
 - **Was:** Variante der Pricing-PD ohne Stressfenster, beide Varianten in SQL, Grafik und Dashboard.
-  **Klasse 9 wechselt das Vorzeichen** (−0,19 → +0,08 pp), Klasse 10 bleibt negativ (−4,56 → −5,12 pp).
+  Klasse 9 liegt in beiden Varianten nahe null (−0,19 bzw. +0,08 pp). Das Vorzeichen ist statistisch nicht
+  bestimmbar: 36 Ausfälle bei 337 Beobachtungen, Standardfehler der Risikokosten ≈ 0,9 pp. Klasse 10 bleibt
+  negativ (−4,56 bzw. −5,12 pp). Dass ihre PD ohne Stresskredite steigt (20,24 % → 21,31 %), ist Rauschen
+  (13 Ausfälle bei 61 Beobachtungen).
   Umbenennung „Risikoadjustierte Marge“ → „Marge nach Risikokosten“ überall (SQL-Datei, CSV, Grafik, Measure,
   Visual, Doku). Betriebs- und Eigenkapitalkosten sind ausdrücklich nicht enthalten.
 - **SQL/DAX-Abgleich:** Das Dashboard rechnete die LGD als Mix der Produkt-LGDs im aktuellen Bestand (≈ 51–52 %),
@@ -156,6 +171,19 @@ Tabelle `annahme` in `sql/00_annahme.sql` (siehe README, Abschnitt *Annahme*).
 - Der Parameter `Datenordner` steht in der PBIP-Fassung wieder auf dem Platzhalter `C:\PFAD\ZUM\ORDNER\...`.
 - Backup des alten Ordners `powerbi/` vor der ersten Änderung: außerhalb des Repos unter `C:\kredit\backup_powerbi_20261120_212228`.
 
+## Nachbesserung (Branch `fix/methodik-nachbesserung`)
+
+1. **NPL-Volumen:** „steigt weiter“ war falsch. Das Volumen stieg ab 07/2024 und läuft seit 2025 seitwärts
+   zwischen rund 7 und 8 Mio. € (09/2025: 7,69, 09/2026: 7,28 Mio. €). Diagrammtitel und Textfeld auf
+   *Risikoentwicklung*, Grafik 01, Kommentare in `sql/04`, README, ANLEITUNG und diese Datei angepasst.
+2. **Klasse 9:** keine Aussage „wechselt das Vorzeichen“ mehr. Die Marge liegt nahe null, das Vorzeichen ist
+   statistisch nicht bestimmbar (Standardfehler der Risikokosten ≈ 0,9 pp). Textfeld auf Seite 4, README, CHANGES.
+3. **Stressfaktor:** Erklärung ergänzt, warum der beobachtete Faktor (Konsum ≈ 1,4, Bau ≈ 2,6) vom Generator-Faktor
+   1,25 abweicht (Seasoning-Mix und Zufall, nicht die Kapitaldienstquote), siehe Fix 6.
+4. **Bezeichnungen:** Matrixspalte „PD roh“ heißt jetzt „Rating-PD vor Floor“. In
+   `expected_loss_nach_stufe` bleibt die PD in der Zeile „Gesamt“ leer, weil ein über Stufe 3 (PD = 100 %)
+   gemittelter Wert keine sinnvolle PD ist.
+
 ## Verbleibende Grenzen (Verteidigungspunkte fürs Interview)
 
 1. **Synthetische Daten:** Jedes Ergebnis kann nur zeigen, dass die Methode die eingebauten Muster findet. Für
@@ -163,7 +191,8 @@ Tabelle `annahme` in `sql/00_annahme.sql` (siehe README, Abschnitt *Annahme*).
 2. **Kein vollständiges IFRS 9:** keine Lifetime-PD für Stufe 2, keine makroökonomischen Szenarien, keine
    Abzinsung des EL mit dem Effektivzins, kein formales SICR-Kriterium.
 3. **Kleine Fallzahlen:** Baufinanzierungs-LGD aus 18 Fällen, Klasse 10 mit 41 Krediten im Neugeschäft,
-   Klassen 1 und 2 mit 2 bis 3 Ausfällen. Konfidenzintervalle wären der nächste Schritt.
+   Klassen 1 und 2 mit 2 bis 3 Ausfällen. Das Vorzeichen der Marge in Klasse 9 ist nicht bestimmbar
+   (Standardfehler der Risikokosten ≈ 0,9 pp). Konfidenzintervalle wären der nächste Schritt.
 4. **Gepoolte PD:** Raten- und Autokredite teilen eine PD, obwohl ihr Risiko verschieden ist. Eigene PDs je
    Produkt wären genauer, aber noch instabiler.
 5. **Überlappende Kohorten:** Beobachtungen sind nicht unabhängig, Standardfehler wären unterschätzt.
